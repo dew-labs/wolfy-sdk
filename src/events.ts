@@ -104,7 +104,7 @@ export enum SatoruEvent {
 //   {} as Record<Event, string>,
 // ))
 
-export const SATORU_EVENT_HASHES = {
+export const SATORU_EVENT_HASHES: Record<SatoruEvent, string> = {
   ClaimableCollateralUpdated: '0x274da576ef5a0071f6d04fcd1780ba213b00e8f11a91e3519e6d2d3025c0bd2',
   ClaimableFundingUpdated: '0x15eebf8297cc3f559ded968b9b253a3f043b1e6da5075ac2111083dc2c456fe',
   PositionImpactPoolAmountUpdated:
@@ -203,11 +203,11 @@ export const SATORU_EVENT_HASHES = {
   SetCodeOwner: '0x17c0a07835dba8310958775aef84afdeee8cd34da2ae39a2e3a93149c99e85f',
   GovSetCodeOwner: '0x37806b1dd5eed589ed27d060b0ccbd717dca8d36dad207f255cf08ee7c97a1e',
   SetGov: '0x39f56992fc193f6a7bc3bb48cfa8836e05369722fe3ee4d49b6da81a86e6b02',
-} as const satisfies Record<SatoruEvent, string>
+}
 
 export type SatoruEventHash = (typeof SATORU_EVENT_HASHES)[keyof typeof SATORU_EVENT_HASHES]
 
-export function getSatoruEventHash(event: SatoruEvent) {
+export function getSatoruEventHash(event: SatoruEvent): string {
   return SATORU_EVENT_HASHES[event]
 }
 

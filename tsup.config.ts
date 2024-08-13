@@ -1,7 +1,7 @@
 import {defineConfig} from 'tsup'
 
 export default defineConfig(options => ({
-  entry: ['src/**/*.ts'],
+  entry: ['src/**/*.ts', '!**/*.d.ts', '!src/scripts/**/*'],
   sourcemap: true,
   clean: true,
   splitting: true,

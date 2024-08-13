@@ -1,15 +1,15 @@
 import {Contract} from 'starknet'
 
-import DataStoreABI from '@/abis/DataStoreABI'
-import DepositVaultABI from '@/abis/DepositVaultABI'
-import EventEmitterABI from '@/abis/EventEmitterABI'
-import ExchangeRouterABI from '@/abis/ExchangeRouterABI'
-import MulticallABI from '@/abis/MulticallABI'
-import OrderVaultABI from '@/abis/OrderVaultABI'
-import ReaderABI from '@/abis/ReaderABI'
-import ReferralStorageABI from '@/abis/ReferralStorageABI'
-import RouterABI from '@/abis/RouterABI'
-import WithdrawalVaultABI from '@/abis/WithdrawalVaultABI'
+import type DataStoreABI from '@/abis/DataStoreABI'
+import type DepositVaultABI from '@/abis/DepositVaultABI'
+import type EventEmitterABI from '@/abis/EventEmitterABI'
+import type ExchangeRouterABI from '@/abis/ExchangeRouterABI'
+import type MulticallABI from '@/abis/MulticallABI'
+import type OrderVaultABI from '@/abis/OrderVaultABI'
+import type ReaderABI from '@/abis/ReaderABI'
+import type ReferralStorageABI from '@/abis/ReferralStorageABI'
+import type RouterABI from '@/abis/RouterABI'
+import type WithdrawalVaultABI from '@/abis/WithdrawalVaultABI'
 
 import {StarknetChainId} from './chains'
 import {getProvider, ProviderType} from './rpcProviders'
@@ -59,7 +59,7 @@ export function registerSatoruContractAddress(
   chainId: StarknetChainId,
   contract: SatoruContract,
   address: string,
-) {
+): void {
   SATORU_CONTRACT_ADDRESSES[chainId][contract] = address
 }
 

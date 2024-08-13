@@ -35,7 +35,7 @@
     // END Handled in eslint
     "jsx": "preserve", // React
     "skipLibCheck": true,
-    "noEmit": false,
+    "noEmit": true,
     "outDir": "./dist",
     "incremental": true,
     "tsBuildInfoFile": "tsconfig.tsbuildinfo",

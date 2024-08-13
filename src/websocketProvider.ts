@@ -2,7 +2,12 @@ import type {ParsedEvent} from 'starknet'
 
 import type {StarknetChainId} from './chains'
 import {getSatoruContractAddress, SatoruContract} from './contracts'
-import {getSatoruEventHash, type ParsedSatoruEvent, parseSatoruEvent, type SatoruEvent} from './events'
+import {
+  getSatoruEventHash,
+  type ParsedSatoruEvent,
+  parseSatoruEvent,
+  type SatoruEvent,
+} from './events'
 
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- in order to achieve optional generic
 export type SatoruEventHandler<T extends SatoruEvent | void = void> = (

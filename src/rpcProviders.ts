@@ -54,18 +54,7 @@ export function registerProvider(
   })
 }
 
-// export function getWssProvider(chainId: StarknetChainId) {
-//   if (!(chainId in WSS_RPC_PROVIDERS)) throw new Error(`Unsupported chain ID: ${chainId}`)
-//   if (HTTP_RPC_PROVIDERS[chainId].length === 0)
-//     throw new Error(`No available WSS RPC providers for chain ID: ${chainId}`)
-
-//   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guranteed non-null
-//   const sampleProvider = sample(WSS_RPC_PROVIDERS[chainId], 1)[0]!
-
-//   return createWebsocketProvider(sampleProvider, chainId)
-// }
-
-export function getProvider(type: ProviderType, chainId: StarknetChainId) {
+export function getProvider(type: ProviderType, chainId: StarknetChainId): RpcProvider | undefined {
   const providersConfigs = RPC_PROVIDERS[type][chainId]
 
   if (providersConfigs.length === 0) {
