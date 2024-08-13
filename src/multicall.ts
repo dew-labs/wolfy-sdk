@@ -10,7 +10,7 @@ import MulticallABI from './abis/MulticallABI'
 import type {StarknetChainId} from './chains'
 import {createSatoruContract, SatoruContract, type SatoruContractAbi} from './contracts'
 
-export function createMulticallRequest<
+export function createSatoruMulticallRequest<
   ContractName extends SatoruContract,
   ContractAbi extends SatoruContractAbi<ContractName>,
   Method extends ExtractAbiFunctionNames<ContractAbi>,
@@ -50,7 +50,7 @@ interface CallAndAbi {
   calldata: unknown
 }
 
-export async function multicall<T extends CallAndAbi, Ts extends T[]>(
+export async function satoruMulticall<T extends CallAndAbi, Ts extends T[]>(
   chainId: StarknetChainId,
   calls: Ts,
 ): Promise<{[k in keyof Ts]: FunctionRet<Ts[k]['abi'], Ts[k]['entrypoint']>}> {

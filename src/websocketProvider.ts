@@ -1,8 +1,8 @@
 import type {ParsedEvent} from 'starknet'
 
 import type {StarknetChainId} from './chains'
-import {getContractAddress, SatoruContract} from './contracts'
-import {getSatoruEventHash, type ParsedSatoruEvent, parseEvent, type SatoruEvent} from './events'
+import {getSatoruContractAddress, SatoruContract} from './contracts'
+import {getSatoruEventHash, type ParsedSatoruEvent, parseSatoruEvent, type SatoruEvent} from './events'
 
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- in order to achieve optional generic
 export type SatoruEventHandler<T extends SatoruEvent | void = void> = (
@@ -10,7 +10,7 @@ export type SatoruEventHandler<T extends SatoruEvent | void = void> = (
 ) => void
 
 export default function createWebsocketProvider(url: string, chainId: StarknetChainId) {
-  const eventEmitterAddress = getContractAddress(chainId, SatoruContract.EventEmitter)
+  const eventEmitterAddress = getSatoruContractAddress(chainId, SatoruContract.EventEmitter)
 
   const ws = new WebSocket(url)
   let id = 0
@@ -86,7 +86,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
       ) {
         const handler = eventHandlers.get(data.result.subscription)
         if (!handler) return
-        const parsedEvent = parseEvent(data.result.result)
+        const parsedEvent = parseSatoruEvent(data.result.result)
         if (!parsedEvent) return
         handler(parsedEvent as never)
       }

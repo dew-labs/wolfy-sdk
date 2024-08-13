@@ -2,6 +2,7 @@ import type {EventToPrimitiveType} from 'node_modules/abi-wan-kanabi/dist/kanabi
 import {CallData, events, type ParsedEvent} from 'starknet'
 
 import EventEmitterABI from './abis/EventEmitterABI'
+
 export enum SatoruEvent {
   ClaimableCollateralUpdated = 'ClaimableCollateralUpdated',
   ClaimableFundingUpdated = 'ClaimableFundingUpdated',
@@ -103,7 +104,7 @@ export enum SatoruEvent {
 //   {} as Record<Event, string>,
 // ))
 
-export const EVENT_HASHES = {
+export const SATORU_EVENT_HASHES = {
   ClaimableCollateralUpdated: '0x274da576ef5a0071f6d04fcd1780ba213b00e8f11a91e3519e6d2d3025c0bd2',
   ClaimableFundingUpdated: '0x15eebf8297cc3f559ded968b9b253a3f043b1e6da5075ac2111083dc2c456fe',
   PositionImpactPoolAmountUpdated:
@@ -204,16 +205,15 @@ export const EVENT_HASHES = {
   SetGov: '0x39f56992fc193f6a7bc3bb48cfa8836e05369722fe3ee4d49b6da81a86e6b02',
 } as const satisfies Record<SatoruEvent, string>
 
-export type SatoruEventHash = (typeof EVENT_HASHES)[keyof typeof EVENT_HASHES]
+export type SatoruEventHash = (typeof SATORU_EVENT_HASHES)[keyof typeof SATORU_EVENT_HASHES]
 
 export function getSatoruEventHash(event: SatoruEvent) {
-  return EVENT_HASHES[event]
+  return SATORU_EVENT_HASHES[event]
 }
 
-export const __eventEmitterAbi = EventEmitterABI
-export const __eventEmitterEvents = events.getAbiEvents(__eventEmitterAbi)
-export const __eventEmitterStructs = CallData.getAbiStruct(__eventEmitterAbi)
-export const __eventEmitterEnums = CallData.getAbiEnum(__eventEmitterAbi)
+const __eventEmitterEvents = events.getAbiEvents(EventEmitterABI)
+const __eventEmitterStructs = CallData.getAbiStruct(EventEmitterABI)
+const __eventEmitterEnums = CallData.getAbiEnum(EventEmitterABI)
 
 export interface EVENT {
   from_address: string
@@ -222,12 +222,12 @@ export interface EVENT {
 }
 
 export type ParsedSatoruEvent<T extends SatoruEvent> = EventToPrimitiveType<
-  typeof __eventEmitterAbi,
+  typeof EventEmitterABI,
   `satoru::event::event_emitter::EventEmitter::${T}`
 >
 
-export function parseEvent(event: unknown): ParsedEvent | undefined
-export function parseEvent<T extends SatoruEvent, R = ParsedSatoruEvent<T>>(
+export function parseSatoruEvent(event: unknown): ParsedEvent | undefined
+export function parseSatoruEvent<T extends SatoruEvent, R = ParsedSatoruEvent<T>>(
   event: unknown,
 ): R | undefined {
   return events.parseEvents(

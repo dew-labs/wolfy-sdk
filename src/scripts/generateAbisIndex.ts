@@ -13,8 +13,12 @@ function generateAbisIndexContent() {
     .join('\n')
 }
 
-const abisIndexContent = generateAbisIndexContent()
+function writeAbisIndexFile() {
+  const abisIndexContent = generateAbisIndexContent()
 
-fs.writeFileSync(`./src/abis/index.ts`, abisIndexContent, {
-  flag: 'w',
-})
+  fs.writeFileSync(`./src/abis/index.ts`, abisIndexContent, {
+    flag: 'w',
+  })
+}
+
+writeAbisIndexFile()

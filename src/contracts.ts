@@ -42,7 +42,7 @@ export interface SatoruContractAbis {
 
 export type SatoruContractAbi<T extends SatoruContract> = SatoruContractAbis[T]
 
-export const CONTRACT_ADDRESSES: Record<
+export const SATORU_CONTRACT_ADDRESSES: Record<
   StarknetChainId,
   Partial<Record<SatoruContract, string>>
 > = {
@@ -55,20 +55,23 @@ export const CONTRACT_ADDRESSES: Record<
   },
 }
 
-export function registerContractAddress(
+export function registerSatoruContractAddress(
   chainId: StarknetChainId,
   contract: SatoruContract,
   address: string,
 ) {
-  CONTRACT_ADDRESSES[chainId][contract] = address
+  SATORU_CONTRACT_ADDRESSES[chainId][contract] = address
 }
 
-export function getContractAddress(chainId: StarknetChainId, contract: SatoruContract): string {
-  if (!CONTRACT_ADDRESSES[chainId][contract]) {
+export function getSatoruContractAddress(
+  chainId: StarknetChainId,
+  contract: SatoruContract,
+): string {
+  if (!SATORU_CONTRACT_ADDRESSES[chainId][contract]) {
     throw new Error(`No contract address found for chain ID: ${chainId}`)
   }
 
-  return CONTRACT_ADDRESSES[chainId][contract]
+  return SATORU_CONTRACT_ADDRESSES[chainId][contract]
 }
 
 export function createSatoruContract<T extends SatoruContract>(
@@ -81,5 +84,5 @@ export function createSatoruContract<T extends SatoruContract>(
     throw new Error(`No http provider found for chain ID: ${chainId}`)
   }
 
-  return new Contract(abi, getContractAddress(chainId, contract), provider).typedv2(abi)
+  return new Contract(abi, getSatoruContractAddress(chainId, contract), provider).typedv2(abi)
 }
