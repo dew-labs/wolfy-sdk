@@ -15,7 +15,7 @@ export function createSatoruMulticallRequest<
   ContractAbi extends SatoruContractAbi<ContractName>,
   Method extends ExtractAbiFunctionNames<ContractAbi>,
   // @ts-expect-error -- complex typescript
-  Args extends FunctionArgs<ContractAbi, Method> extends unknown[]
+  Args extends FunctionArgs<ContractAbi, Method> extends unknown[] // note: we have to do this because some how FunctionArgs is wrong for single element
     ? // @ts-expect-error -- complex typescript
       FunctionArgs<ContractAbi, Method>
     : // @ts-expect-error -- complex typescript

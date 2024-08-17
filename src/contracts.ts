@@ -1,16 +1,23 @@
-import {Contract} from 'starknet'
+import {type AccountInterface, type Call, Contract} from 'starknet'
 
-import type DataStoreABI from '@/abis/DataStoreABI'
-import type DepositVaultABI from '@/abis/DepositVaultABI'
-import type EventEmitterABI from '@/abis/EventEmitterABI'
-import type ExchangeRouterABI from '@/abis/ExchangeRouterABI'
-import type MulticallABI from '@/abis/MulticallABI'
-import type OrderVaultABI from '@/abis/OrderVaultABI'
-import type ReaderABI from '@/abis/ReaderABI'
-import type ReferralStorageABI from '@/abis/ReferralStorageABI'
-import type RouterABI from '@/abis/RouterABI'
-import type WithdrawalVaultABI from '@/abis/WithdrawalVaultABI'
-
+import {
+  type DataStoreABI,
+  type DepositHandlerABI,
+  type DepositVaultABI,
+  ERC20ABI,
+  type EventEmitterABI,
+  type ExchangeRouterABI,
+  type MarketFactoryABI,
+  type MulticallABI,
+  type OrderHandlerABI,
+  type OrderVaultABI,
+  type ReaderABI,
+  type ReferralStorageABI,
+  type RoleStoreABI,
+  type RouterABI,
+  type WithdrawalHandlerABI,
+  type WithdrawalVaultABI,
+} from './abis'
 import {StarknetChainId} from './chains'
 import {getProvider, ProviderType} from './rpcProviders'
 
@@ -25,6 +32,13 @@ export enum SatoruContract {
   Reader = 'Reader',
   Router = 'Router',
   ExchangeRouter = 'ExchangeRouter',
+  //----------------------------------------------------------------------------v
+  RoleStore = 'RoleStore',
+  MarketFactory = 'MarketFactory',
+  // SwapHandler = 'SwapHandler',
+  OrderHandler = 'OrderHandler',
+  DepositHandler = 'DepositHandler',
+  WithdrawalHandler = 'WithdrawalHandler',
 }
 
 export interface SatoruContractAbis {
@@ -38,6 +52,12 @@ export interface SatoruContractAbis {
   [SatoruContract.Reader]: typeof ReaderABI
   [SatoruContract.Router]: typeof RouterABI
   [SatoruContract.ExchangeRouter]: typeof ExchangeRouterABI
+  [SatoruContract.RoleStore]: typeof RoleStoreABI
+  [SatoruContract.MarketFactory]: typeof MarketFactoryABI
+  // [SatoruContract.SwapHandler]: typeof SwapHandlerABI
+  [SatoruContract.OrderHandler]: typeof OrderHandlerABI
+  [SatoruContract.DepositHandler]: typeof DepositHandlerABI
+  [SatoruContract.WithdrawalHandler]: typeof WithdrawalHandlerABI
 }
 
 export type SatoruContractAbi<T extends SatoruContract> = SatoruContractAbis[T]
@@ -76,13 +96,38 @@ export function getSatoruContractAddress(
 
 export function createSatoruContract<T extends SatoruContract>(
   chainId: StarknetChainId,
-  contract: T,
+  contractName: T,
   abi: SatoruContractAbi<T>,
+  connectTo?: AccountInterface,
 ) {
   const provider = getProvider(ProviderType.HTTP, chainId)
-  if (!provider) {
-    throw new Error(`No http provider found for chain ID: ${chainId}`)
-  }
 
-  return new Contract(abi, getSatoruContractAddress(chainId, contract), provider).typedv2(abi)
+  const contract = new Contract(
+    abi,
+    getSatoruContractAddress(chainId, contractName),
+    provider,
+  ).typedv2(abi)
+
+  if (connectTo) contract.connect(connectTo)
+
+  return contract
+}
+
+export function createTokenContract(
+  chainId: StarknetChainId,
+  address: string,
+  connectTo?: AccountInterface,
+) {
+  const provider = getProvider(ProviderType.HTTP, chainId)
+
+  const contract = new Contract(ERC20ABI, address, provider).typedv2(ERC20ABI)
+
+  if (connectTo) contract.connect(connectTo)
+
+  return contract
+}
+
+export async function executeAndWait(account: AccountInterface, calls: Call | Call[]) {
+  const result = await account.execute(calls)
+  return await account.waitForTransaction(result.transaction_hash)
 }

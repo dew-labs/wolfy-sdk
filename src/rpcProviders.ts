@@ -2,6 +2,8 @@ import random from 'just-random'
 import {RpcProvider} from 'starknet'
 
 import {StarknetChainId} from './chains'
+import type {SatoruWebSocketProvider} from './websocketProvider'
+import createWebsocketProvider from './websocketProvider'
 
 export enum ProviderType {
   HTTP = 'HTTP',
@@ -54,7 +56,10 @@ export function registerProvider(
   })
 }
 
-export function getProvider(type: ProviderType, chainId: StarknetChainId): RpcProvider | undefined {
+export function getProvider<T extends ProviderType>(
+  type: T,
+  chainId: StarknetChainId,
+): T extends ProviderType.HTTP ? RpcProvider : SatoruWebSocketProvider {
   const providersConfigs = RPC_PROVIDERS[type][chainId]
 
   if (providersConfigs.length === 0) {
@@ -74,6 +79,10 @@ export function getProvider(type: ProviderType, chainId: StarknetChainId): RpcPr
     return new RpcProvider({
       nodeUrl: providerUrl,
       batch: 0,
-    })
+    }) as T extends ProviderType.HTTP ? RpcProvider : SatoruWebSocketProvider
   }
+
+  return createWebsocketProvider(providerUrl, chainId) as T extends ProviderType.HTTP
+    ? RpcProvider
+    : SatoruWebSocketProvider
 }

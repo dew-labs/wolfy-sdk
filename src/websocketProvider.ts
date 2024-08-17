@@ -14,6 +14,8 @@ export type SatoruEventHandler<T extends SatoruEvent | void = void> = (
   event: T extends SatoruEvent ? ParsedSatoruEvent<T> : ParsedEvent,
 ) => void
 
+export type SatoruWebSocketProvider = ReturnType<typeof createWebsocketProvider>
+
 export default function createWebsocketProvider(url: string, chainId: StarknetChainId) {
   const eventEmitterAddress = getSatoruContractAddress(chainId, SatoruContract.EventEmitter)
 

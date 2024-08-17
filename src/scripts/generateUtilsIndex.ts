@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 
-const FOLDER_PATH = './src/abis'
+const FOLDER_PATH = './src/utils'
 
 function generateIndexContent() {
   const fileNames = fs
@@ -14,11 +14,13 @@ function generateIndexContent() {
     )
     .map(file => file.name.replace('.ts', ''))
 
-  return fileNames
-    .map(fileName => {
-      return `export {default as ${fileName}} from './${fileName}'`
-    })
-    .join('\n')
+  return [
+    '/* eslint-disable no-barrel-files/no-barrel-files -- must be a barrel file */',
+    ...fileNames.map(fileName => {
+      return `export * from './${fileName}'`
+    }),
+    '/* eslint-enable no-barrel-files/no-barrel-files -- must be a barrel file */',
+  ].join('\n')
 }
 
 function writeIndexFile() {
