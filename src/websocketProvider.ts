@@ -1,13 +1,8 @@
 import type {ParsedEvent} from 'starknet'
 
-import type {StarknetChainId} from './chains'
+import {StarknetChainId} from './chains'
 import {getSatoruContractAddress, SatoruContract} from './contracts'
-import {
-  getSatoruEventHash,
-  type ParsedSatoruEvent,
-  parseSatoruEvent,
-  type SatoruEvent,
-} from './events'
+import {getSatoruEventHash, type ParsedSatoruEvent, parseSatoruEvent, SatoruEvent} from './events'
 
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- in order to achieve optional generic
 export type SatoruEventHandler<T extends SatoruEvent | void = void> = (
@@ -25,17 +20,20 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
   const promises = new Map<
     number,
     | {
+        isSubscribe: true
         eventHandler: SatoruEventHandler
+        eventName: SatoruEvent
         resolve: (unsubscriber: () => Promise<void>) => void
         reject: (error: Error) => void
       }
     | {
-        eventHandler: undefined
+        isSubscribe: false
         resolve: (result: boolean) => void
         reject: (error: Error) => void
       }
   >()
   const eventHandlers = new Map<number, SatoruEventHandler>()
+  const eventNames = new Map<number, SatoruEvent>()
 
   ws.onopen = () => {
     console.log(`WebSocket Provider connected to ${url}`)
@@ -63,10 +61,11 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guranteed non-null
           const promise = promises.get(id)!
 
-          if (promise.eventHandler) {
+          if (promise.isSubscribe) {
             if (typeof data.result === 'number') {
               const subscription = data.result
               eventHandlers.set(subscription, promise.eventHandler)
+              eventNames.set(subscription, promise.eventName)
               promise.resolve(async () => unsubscribe(subscription))
             } else
               promise.resolve(async () => {
@@ -92,8 +91,9 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
         'result' in data.result
       ) {
         const handler = eventHandlers.get(data.result.subscription)
+        const eventName = eventNames.get(data.result.subscription)
         if (!handler) return
-        const parsedEvent = parseSatoruEvent(data.result.result)
+        const parsedEvent = parseSatoruEvent(eventName, data.result.result)
         if (!parsedEvent) return
         handler(parsedEvent as never)
       }
@@ -106,12 +106,14 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
 
   async function send<T extends SatoruEvent>(
     message: {method: string; params: unknown},
+    eventName: T,
     eventHandler: SatoruEventHandler<T>,
   ): Promise<() => Promise<boolean>>
   async function send(message: {method: string; params: unknown}): Promise<void>
   async function send(
     message: {method: string; params: unknown},
-    eventHandler?: SatoruEventHandler,
+    eventName?: SatoruEvent | undefined,
+    eventHandler?: SatoruEventHandler | undefined,
   ) {
     if ([WebSocket.CLOSED, WebSocket.CLOSING].includes(ws.readyState)) {
       return Promise.reject(new Error('WebSocket Provider is not closed'))
@@ -134,7 +136,14 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     }
 
     return new Promise((resolve, reject) => {
-      promises.set(id, {eventHandler, resolve, reject})
+      let promise
+      if (eventName && eventHandler) {
+        promise = {isSubscribe: true, eventName, eventHandler, resolve, reject} as const
+      } else {
+        promise = {isSubscribe: false, resolve, reject} as const
+      }
+
+      promises.set(id, promise)
     })
   }
 
@@ -152,6 +161,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
           keys: [[eventHash]],
         },
       },
+      event,
       eventHandler,
     )
   }
@@ -174,9 +184,9 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
 }
 
 // Usages:
-// const wssProvider = getWssProvider(chainId)
+// const wssProvider = getProvider(ProviderType.WSS, StarknetChainId.SN_SEPOLIA)
 
 // const eventHandler: SatoruEventHandler<SatoruEvent.OrderCreated> = e => {
-//   console.log(e)
+//   console.log(e.order)
 // }
 // const unsubscribe = await wssProvider.subscribeToEvent(SatoruEvent.OrderCreated, eventHandler)

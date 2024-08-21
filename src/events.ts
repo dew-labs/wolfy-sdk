@@ -226,14 +226,21 @@ export type ParsedSatoruEvent<T extends SatoruEvent> = EventToPrimitiveType<
   `satoru::event::event_emitter::EventEmitter::${T}`
 >
 
-export function parseSatoruEvent(event: unknown): ParsedEvent | undefined
+export function parseSatoruEvent(eventName: unknown, event: unknown): ParsedEvent | undefined
 export function parseSatoruEvent<T extends SatoruEvent, R = ParsedSatoruEvent<T>>(
+  eventName: T,
   event: unknown,
 ): R | undefined {
-  return events.parseEvents(
+  const parsedValue = events.parseEvents(
     [event] as [EVENT],
     __eventEmitterEvents,
     __eventEmitterStructs,
     __eventEmitterEnums,
-  )[0] as R
+  )[0]
+
+  if (!parsedValue) {
+    throw new Error(`Failed to parse event ${eventName}`)
+  }
+
+  return parsedValue[`satoru::event::event_emitter::EventEmitter::${eventName}`] as R
 }

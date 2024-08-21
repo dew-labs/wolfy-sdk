@@ -1,6 +1,6 @@
 {
   "name": "satoru-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -20,6 +20,9 @@
       }
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "base:lint:script": "eslint --cache",
     "lint:script": "pnpm run base:lint:script --color $([ \"$PRETTY_FORMAT\" == \"true\" ] && echo \"--format=pretty\")",
@@ -37,7 +40,8 @@
     "generate:utils-index": "tsx ./src/scripts/generateUtilsIndex.ts",
     "generate": "pnpm run --parallel --aggregate-output --reporter-hide-prefix '/^generate:(.+)$/'",
     "prebuild": "pnpm run generate",
-    "build": "tsup"
+    "build": "tsup",
+    "prepublishOnly": "pnpm run build --no-sourcemap --minify"
   },
   "keywords": [],
   "author": "",
