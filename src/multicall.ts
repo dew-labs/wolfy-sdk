@@ -4,7 +4,8 @@ import type {
   FunctionArgs,
   FunctionRet,
 } from 'node_modules/abi-wan-kanabi/dist/kanabi'
-import {CallData, hash, type RawArgs} from 'starknet'
+import {CallData, hash} from 'starknet'
+import {createMulticallRequest} from 'starknet_multicall'
 
 import MulticallABI from './abis/MulticallABI'
 import type {StarknetChainId} from './chains'
@@ -33,14 +34,9 @@ export function createSatoruMulticallRequest<
   calldata: Args
 } {
   const contract = createSatoruContract(chainId, contractName, abi)
-  const call = contract.populate(method, args as RawArgs)
 
-  return {
-    abi: abi,
-    contractAddress: call.contractAddress,
-    entrypoint: method,
-    calldata: call.calldata as Args,
-  }
+  // @ts-expect-error -- complex typescript
+  return createMulticallRequest(contract.address, abi, method, args)
 }
 
 interface CallAndAbi {

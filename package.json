@@ -1,6 +1,6 @@
 {
   "name": "satoru-sdk",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -52,10 +52,11 @@
     "abi-wan-kanabi": "^2.2.2",
     "just-random": "^3.2.0",
     "starknet": "^6.12.1",
-    "typescript": "^5.5.4"
+    "starknet_multicall": "^1.0.0"
   },
   "peerDependencies": {
-    "abi-wan-kanabi": "^2.2.2"
+    "abi-wan-kanabi": "^2.2.2",
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",

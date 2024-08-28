@@ -17,9 +17,9 @@ importers:
       starknet:
         specifier: ^6.12.1
         version: 6.12.1
-      typescript:
-        specifier: ^5.5.4
-        version: 5.5.4
+      starknet_multicall:
+        specifier: ^1.0.0
+        version: 1.0.0(abi-wan-kanabi@2.2.2)(typescript@5.5.4)
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.3.0
@@ -156,6 +156,9 @@ importers:
       tsx:
         specifier: ^4.17.0
         version: 4.17.0
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
       typescript-eslint:
         specifier: ^8.0.0
         version: 8.1.0(eslint@9.9.0(jiti@1.21.6))(typescript@5.5.4)
@@ -2922,6 +2925,12 @@ packages:
 
   starknet@6.12.1:
     resolution: {integrity: sha512-LLjabmmkRsBOgg0UaJtkSBBEpqeM49vULWqk06xbdm2kefcTqPLeHN4uYcZ5EqMwoqibv8rGf3a2w6IwXexeSg==}
+
+  starknet_multicall@1.0.0:
+    resolution: {integrity: sha512-NyUVexIMwOJZuz4lrqeXTgbtOCG6Lt6tpaxoGjWwoNY4v3cUSvXYjoorZjrt4dULJfngKCDviZg7fbSf23ouWg==}
+    peerDependencies:
+      abi-wan-kanabi: ^2.2.3
+      typescript: ^5.5.4
 
   std-env@3.7.0:
     resolution: {integrity: sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==}
@@ -6435,6 +6444,14 @@ snapshots:
       starknet-types-07: '@starknet-io/types-js@0.7.7'
       ts-mixer: 6.0.4
       url-join: 4.0.1
+    transitivePeerDependencies:
+      - encoding
+
+  starknet_multicall@1.0.0(abi-wan-kanabi@2.2.2)(typescript@5.5.4):
+    dependencies:
+      abi-wan-kanabi: 2.2.2
+      starknet: 6.12.1
+      typescript: 5.5.4
     transitivePeerDependencies:
       - encoding
 
