@@ -36,6 +36,7 @@
     "test:update-snapshot": "pnpm run test -u",
     "type-check": "tsc --noEmit",
     "tree-shake-check": "pnpm dlx agadoo",
+    "generate:index": "tsx ./src/scripts/generateIndex.ts",
     "generate:abis-index": "tsx ./src/scripts/generateAbisIndex.ts",
     "generate:utils-index": "tsx ./src/scripts/generateUtilsIndex.ts",
     "generate": "pnpm run --parallel --aggregate-output --reporter-hide-prefix '/^generate:(.+)$/'",

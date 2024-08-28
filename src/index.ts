@@ -1,4 +1,4 @@
-/* eslint-disable no-barrel-files/no-barrel-files -- export files */
+/* eslint-disable no-barrel-files/no-barrel-files -- must be a barrel file */
 export * from './abis'
 export * from './chains'
 export * from './contracts'
@@ -9,4 +9,4 @@ export * from './roles'
 export * from './rpcProviders'
 export * from './utils'
 export * from './websocketProvider'
-/* eslint-enable no-barrel-files/no-barrel-files -- export files */
+/* eslint-enable no-barrel-files/no-barrel-files -- must be a barrel file */
