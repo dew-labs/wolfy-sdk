@@ -88,10 +88,9 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
               eventHandlers.set(subscription, promise.eventHandler)
               eventNames.set(subscription, promise.eventName)
               promise.resolve(async () => unsubscribe(subscription))
-            } else
-              promise.resolve(async () => {
-                // empty
-              })
+            } else {
+              promise.reject(new Error('Invalid subscription result', {cause: data}))
+            }
           } else {
             if (typeof data.result === 'boolean') promise.resolve(data.result)
             else promise.resolve(false)
@@ -164,24 +163,52 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     })
   }
 
-  // TODO: implement timeout and retry
   async function subscribeToEvent<T extends SatoruEvent>(
     event: T,
     eventHandler: SatoruEventHandler<T>,
-  ) {
+    timeout = 10000, // ms
+    retry: number | false = 3, // number of retries before reject, false for no retries, 0 for infinite retries
+  ): Promise<() => Promise<boolean>> {
     const eventHash = getSatoruEventHash(event)
-    return send(
-      {
-        method: 'pathfinder_subscribe',
-        params: {
-          kind: 'events',
-          address: eventEmitterAddress,
-          keys: [[eventHash]],
+
+    async function trySend() {
+      const timeoutPromise = new Promise<() => Promise<boolean>>((_resolve, reject) => {
+        setTimeout(() => {
+          reject(new Error(`Timed out when subscribe to ${event} event.`))
+        }, timeout)
+      })
+
+      const sendPromise = send(
+        {
+          method: 'pathfinder_subscribe',
+          params: {
+            kind: 'events',
+            address: eventEmitterAddress,
+            keys: [[eventHash]],
+          },
         },
-      },
-      event,
-      eventHandler,
-    )
+        event,
+        eventHandler,
+      )
+
+      return await Promise.race([sendPromise, timeoutPromise])
+    }
+
+    if (!retry) return await trySend()
+
+    let retryCount = 0
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- its intentional
+    while (true) {
+      try {
+        return await trySend()
+      } catch (e: unknown) {
+        retryCount++
+        if (retry !== 0 && retryCount === retry) {
+          throw e
+        }
+      }
+    }
   }
 
   // TODO: implement timeout and retry
