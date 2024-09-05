@@ -1,12 +1,15 @@
 import {type AccountInterface, type Call, Contract} from 'starknet'
 
 import {
+  type AdlHandlerABI,
   type DataStoreABI,
   type DepositHandlerABI,
   type DepositVaultABI,
   ERC20ABI,
   type EventEmitterABI,
   type ExchangeRouterABI,
+  type FeeHandlerABI,
+  type LiquidationHandlerABI,
   type MarketFactoryABI,
   type MulticallABI,
   type OrderHandlerABI,
@@ -15,6 +18,7 @@ import {
   type ReferralStorageABI,
   type RoleStoreABI,
   type RouterABI,
+  type SwapHandlerABI,
   type WithdrawalHandlerABI,
   type WithdrawalVaultABI,
 } from './abis'
@@ -39,6 +43,10 @@ export enum SatoruContract {
   OrderHandler = 'OrderHandler',
   DepositHandler = 'DepositHandler',
   WithdrawalHandler = 'WithdrawalHandler',
+  AdlHandler = 'AdlHandler',
+  LiquidationHandler = 'LiquidationHandler',
+  SwapHandler = 'SwapHandler',
+  FeeHandler = 'FeeHandler',
 }
 
 export interface SatoruContractAbis {
@@ -54,9 +62,12 @@ export interface SatoruContractAbis {
   [SatoruContract.ExchangeRouter]: typeof ExchangeRouterABI
   [SatoruContract.RoleStore]: typeof RoleStoreABI
   [SatoruContract.MarketFactory]: typeof MarketFactoryABI
-  // [SatoruContract.SwapHandler]: typeof SwapHandlerABI
+  [SatoruContract.SwapHandler]: typeof SwapHandlerABI
   [SatoruContract.OrderHandler]: typeof OrderHandlerABI
   [SatoruContract.DepositHandler]: typeof DepositHandlerABI
+  [SatoruContract.AdlHandler]: typeof AdlHandlerABI
+  [SatoruContract.LiquidationHandler]: typeof LiquidationHandlerABI
+  [SatoruContract.FeeHandler]: typeof FeeHandlerABI
   [SatoruContract.WithdrawalHandler]: typeof WithdrawalHandlerABI
 }
 
