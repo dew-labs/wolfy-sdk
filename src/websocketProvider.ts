@@ -34,9 +34,16 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
   >()
   const eventHandlers = new Map<number, SatoruEventHandler>()
   const eventNames = new Map<number, SatoruEvent>()
+  let onOpenEventHandler: (() => void) | undefined = undefined
+  let onCloseEventHandler: (() => void) | undefined = undefined
+  let onErrorEventHandler: ((error: unknown) => void) | undefined = undefined
 
   ws.onopen = () => {
-    console.log(`WebSocket Provider connected to ${url}`)
+    if (onOpenEventHandler) {
+      onOpenEventHandler()
+    } else {
+      console.log(`WebSocket Provider connected to ${url}`)
+    }
     while (pendingMessages.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guranteed non-null
       ws.send(pendingMessages.shift()!)
@@ -44,7 +51,21 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
   }
 
   ws.onerror = error => {
+    if (onErrorEventHandler) {
+      onErrorEventHandler(error)
+      return
+    }
+
     console.error(`WebSocketProvider error:`, error)
+  }
+
+  ws.onclose = () => {
+    if (onCloseEventHandler) {
+      onCloseEventHandler()
+      return
+    }
+
+    console.log('WebSocket Provider disconnected')
   }
 
   ws.onmessage = message => {
@@ -100,10 +121,6 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     }
   }
 
-  ws.onclose = () => {
-    console.log('WebSocket Provider disconnected')
-  }
-
   async function send<T extends SatoruEvent>(
     message: {method: string; params: unknown},
     eventName: T,
@@ -147,6 +164,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     })
   }
 
+  // TODO: implement timeout and retry
   async function subscribeToEvent<T extends SatoruEvent>(
     event: T,
     eventHandler: SatoruEventHandler<T>,
@@ -166,11 +184,24 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     )
   }
 
+  // TODO: implement timeout and retry
   async function unsubscribe(id: number) {
     return send({
       method: 'pathfinder_unsubscribe',
       params: [id],
     })
+  }
+
+  function onOpen(handler: () => void) {
+    onOpenEventHandler = handler
+  }
+
+  function onClose(handler: () => void) {
+    onCloseEventHandler = handler
+  }
+
+  function onError(handler: (error: unknown) => void) {
+    onErrorEventHandler = handler
   }
 
   function close() {
@@ -180,6 +211,9 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
   return {
     subscribeToEvent,
     close,
+    onOpen,
+    onClose,
+    onError,
   }
 }
 
@@ -190,3 +224,15 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
 //   console.log(e.order)
 // }
 // const unsubscribe = await wssProvider.subscribeToEvent(SatoruEvent.OrderCreated, eventHandler)
+// const handleOnOpen = () => {
+//   console.log('wss openned')
+// }
+// wssProvider.onOpen(handleOnOpen)
+// const handleOnClose = () => {
+//   console.log('wss closed')
+// }
+// wssProvider.onClose(handleOnClose)
+// const handleOnError = (error: unknown) => {
+//   console.log('wss error:', error)
+// }
+// wssProvider.onError(handleOnError)
