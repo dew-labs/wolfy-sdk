@@ -39,7 +39,6 @@ export enum SatoruContract {
   //----------------------------------------------------------------------------v
   RoleStore = 'RoleStore',
   MarketFactory = 'MarketFactory',
-  // SwapHandler = 'SwapHandler',
   OrderHandler = 'OrderHandler',
   DepositHandler = 'DepositHandler',
   WithdrawalHandler = 'WithdrawalHandler',

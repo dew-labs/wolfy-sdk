@@ -1,34 +1,22 @@
-import {CairoUint256, CairoUint512} from 'starknet'
-
-interface U256 {
-  low: bigint
-  high: bigint
-}
-
-interface U512 {
-  limb0: bigint
-  limb1: bigint
-  limb2: bigint
-  limb3: bigint
-}
+import {CairoUint256, CairoUint512, type Uint256, type Uint512} from 'starknet'
 
 interface SignedInteger {
-  mag: number | bigint | U256 | U512
+  mag: number | bigint | Uint256 | Uint512
   sign: boolean
 }
 
-function isU256(num: unknown): num is U256 {
+function isU256(num: unknown): num is Uint256 {
   return (
     num !== null &&
     typeof num === 'object' &&
     'low' in num &&
     'high' in num &&
-    typeof num.low === 'bigint' &&
-    typeof num.high === 'bigint'
+    ['string', 'number', 'bigint'].includes(typeof num.low) &&
+    ['string', 'number', 'bigint'].includes(typeof num.high)
   )
 }
 
-function isU512(num: unknown): num is U512 {
+function isU512(num: unknown): num is Uint512 {
   return (
     num !== null &&
     typeof num === 'object' &&
@@ -36,10 +24,10 @@ function isU512(num: unknown): num is U512 {
     'limb1' in num &&
     'limb2' in num &&
     'limb3' in num &&
-    typeof num.limb0 === 'bigint' &&
-    typeof num.limb1 === 'bigint' &&
-    typeof num.limb2 === 'bigint' &&
-    typeof num.limb3 === 'bigint'
+    ['string', 'number', 'bigint'].includes(typeof num.limb0) &&
+    ['string', 'number', 'bigint'].includes(typeof num.limb1) &&
+    ['string', 'number', 'bigint'].includes(typeof num.limb2) &&
+    ['string', 'number', 'bigint'].includes(typeof num.limb3)
   )
 }
 
@@ -58,7 +46,7 @@ function isSignedInteger(num: unknown): num is SignedInteger {
 }
 
 export function cairoIntToBigInt(
-  num: string | number | bigint | U256 | U512 | SignedInteger,
+  num: string | number | bigint | Uint256 | Uint512 | SignedInteger,
 ): bigint {
   if (typeof num === 'object') {
     if (isSignedInteger(num)) return cairoIntToBigInt(num.mag) * (num.sign ? -1n : 1n)
