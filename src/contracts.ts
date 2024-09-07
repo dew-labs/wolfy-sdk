@@ -36,7 +36,6 @@ export enum SatoruContract {
   Reader = 'Reader',
   Router = 'Router',
   ExchangeRouter = 'ExchangeRouter',
-  //----------------------------------------------------------------------------v
   RoleStore = 'RoleStore',
   MarketFactory = 'MarketFactory',
   OrderHandler = 'OrderHandler',
@@ -46,6 +45,10 @@ export enum SatoruContract {
   LiquidationHandler = 'LiquidationHandler',
   SwapHandler = 'SwapHandler',
   FeeHandler = 'FeeHandler',
+}
+
+export function isSatoruContract(contractName: string): contractName is SatoruContract {
+  return contractName in SatoruContract
 }
 
 export interface SatoruContractAbis {
