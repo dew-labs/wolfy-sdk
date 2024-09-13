@@ -42,7 +42,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     if (onOpenEventHandler) {
       onOpenEventHandler()
     } else {
-      console.log(`WebSocket Provider connected to ${url}`)
+      console.debug(`WebSocket Provider connected to ${url}`)
     }
     while (pendingMessages.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guranteed non-null
@@ -65,11 +65,11 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
       return
     }
 
-    console.log('WebSocket Provider disconnected')
+    console.debug('WebSocket Provider disconnected')
   }
 
   ws.onmessage = message => {
-    console.log(`WebSocketProvider received message: ${message.data}`)
+    console.debug(`WebSocketProvider received message: ${message.data}`)
 
     if (typeof message.data !== 'string') return
     const data = JSON.parse(message.data)

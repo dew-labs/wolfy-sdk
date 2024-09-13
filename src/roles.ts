@@ -50,7 +50,7 @@ export async function grantRole(
   const alreadyHasRole = alreadyHasRoles.every(result => result)
 
   if (alreadyHasRole) {
-    console.log(`Role ${roles.join(', ')} already granted to ${entityName ?? address}`)
+    console.debug(`Role ${roles.join(', ')} already granted to ${entityName ?? address}`)
     return
   }
 
@@ -72,7 +72,7 @@ export async function grantRole(
   const receipt = await roleAdmin.waitForTransaction(result.transaction_hash)
 
   if (receipt.isSuccess()) {
-    console.log(`Role ${roles.join(', ')} granted to ${entityName ?? address}`)
+    console.debug(`Role ${roles.join(', ')} granted to ${entityName ?? address}`)
     return
   }
 
