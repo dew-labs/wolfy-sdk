@@ -14,7 +14,7 @@ export default {
   '*.{js,jsx,mjs,cjs,ts,mts,cts,json}': filenames => [
     `${packageJson.scripts['base:lint:script']} --fix ${filenames.map(escape).join(' ')}`,
   ],
-  'package.json': ['pnpm run lint:pub'],
+  'package.json': () => ['pnpm run lint:pub'],
   '(*.{js,jsx,mjs,cjs,ts,mts,cts,json})': filenames => [
     `${packageJson.scripts['test']} related --run ${filenames.map(escape).join(' ')}`,
   ],

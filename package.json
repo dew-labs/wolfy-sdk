@@ -26,7 +26,7 @@
   "scripts": {
     "base:lint:script": "eslint --cache",
     "lint:script": "pnpm run base:lint:script --color $([ \"$PRETTY_FORMAT\" == \"true\" ] && echo \"--format=pretty\")",
-    "lint:pub": "pnpm dlx publint",
+    "lint:pub": "publint",
     "lint": "pnpm run --parallel --aggregate-output --reporter-hide-prefix '/^lint:(.+)$/'",
     "fix": "pnpm run lint --fix",
     "test": "vitest",
@@ -42,7 +42,8 @@
     "generate": "pnpm run --parallel --aggregate-output --reporter-hide-prefix '/^generate:(.+)$/'",
     "prebuild": "pnpm run generate",
     "build": "tsup",
-    "prepublishOnly": "pnpm run build --no-sourcemap --minify"
+    "prepublishOnly": "pnpm run build --no-sourcemap --minify",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -99,9 +100,10 @@
     "eslint-plugin-unicorn": "^55.0.0",
     "eslint-plugin-vitest": "^0.5.4",
     "globals": "^15.9.0",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.2.8",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
+    "publint": "^0.2.11",
     "tsup": "^8.2.4",
     "tsx": "^4.17.0",
     "typescript": "^5.5.4",
