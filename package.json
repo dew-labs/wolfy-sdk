@@ -1,6 +1,6 @@
 {
   "name": "satoru-sdk",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -17,6 +17,116 @@
       "require": {
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
+      }
+    },
+    "./abis/index": {
+      "import": {
+        "types": "./dist/abis/index.d.ts",
+        "default": "./dist/abis/index.js"
+      },
+      "require": {
+        "types": "./dist/abis/index.d.cts",
+        "default": "./dist/abis/index.cjs"
+      }
+    },
+    "./chains": {
+      "import": {
+        "types": "./dist/chains.d.ts",
+        "default": "./dist/chains.js"
+      },
+      "require": {
+        "types": "./dist/chains.d.cts",
+        "default": "./dist/chains.cjs"
+      }
+    },
+    "./contracts": {
+      "import": {
+        "types": "./dist/contracts.d.ts",
+        "default": "./dist/contracts.js"
+      },
+      "require": {
+        "types": "./dist/contracts.d.cts",
+        "default": "./dist/contracts.cjs"
+      }
+    },
+    "./dataStore": {
+      "import": {
+        "types": "./dist/dataStore.d.ts",
+        "default": "./dist/dataStore.js"
+      },
+      "require": {
+        "types": "./dist/dataStore.d.cts",
+        "default": "./dist/dataStore.cjs"
+      }
+    },
+    "./events": {
+      "import": {
+        "types": "./dist/events.d.ts",
+        "default": "./dist/events.js"
+      },
+      "require": {
+        "types": "./dist/events.d.cts",
+        "default": "./dist/events.cjs"
+      }
+    },
+    "./multicall": {
+      "import": {
+        "types": "./dist/multicall.d.ts",
+        "default": "./dist/multicall.js"
+      },
+      "require": {
+        "types": "./dist/multicall.d.cts",
+        "default": "./dist/multicall.cjs"
+      }
+    },
+    "./order": {
+      "import": {
+        "types": "./dist/order.d.ts",
+        "default": "./dist/order.js"
+      },
+      "require": {
+        "types": "./dist/order.d.cts",
+        "default": "./dist/order.cjs"
+      }
+    },
+    "./roles": {
+      "import": {
+        "types": "./dist/roles.d.ts",
+        "default": "./dist/roles.js"
+      },
+      "require": {
+        "types": "./dist/roles.d.cts",
+        "default": "./dist/roles.cjs"
+      }
+    },
+    "./rpcProviders": {
+      "import": {
+        "types": "./dist/rpcProviders.d.ts",
+        "default": "./dist/rpcProviders.js"
+      },
+      "require": {
+        "types": "./dist/rpcProviders.d.cts",
+        "default": "./dist/rpcProviders.cjs"
+      }
+    },
+    "./utils/index": {
+      "import": {
+        "types": "./dist/utils/index.d.ts",
+        "default": "./dist/utils/index.js"
+      },
+      "require": {
+        "types": "./dist/utils/index.d.cts",
+        "default": "./dist/utils/index.cjs"
+      }
+    },
+    "./websocketProvider": {
+      "import": {
+        "types": "./dist/websocketProvider.d.ts",
+        "default": "./dist/websocketProvider.js"
+      },
+      "require": {
+        "types": "./dist/websocketProvider.d.cts",
+        "default": "./dist/websocketProvider.cjs"
       }
     }
   },
@@ -40,6 +150,7 @@
     "generate:index": "tsx ./src/scripts/generateIndex.ts",
     "generate:abis-index": "tsx ./src/scripts/generateAbisIndex.ts",
     "generate:utils-index": "tsx ./src/scripts/generateUtilsIndex.ts",
+    "generate:package-json": "tsx ./src/scripts/updatePackageJson.ts",
     "generate": "pnpm run --parallel --aggregate-output --reporter-hide-prefix '/^generate:(.+)$/'",
     "prebuild": "pnpm run generate",
     "build": "tsup",
