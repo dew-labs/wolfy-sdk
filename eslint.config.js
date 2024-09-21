@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url'
 import {FlatCompat} from '@eslint/eslintrc'
 import eslint from '@eslint/js'
 import pluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments'
+// eslint-disable-next-line import-x/default, import-x/no-named-as-default, import-x/no-named-as-default-member -- import-x error
 import pluginGitignore from 'eslint-config-flat-gitignore'
 import pluginDepend from 'eslint-plugin-depend'
 // import pluginDeprecation from 'eslint-plugin-deprecation'
@@ -22,6 +23,7 @@ import * as pluginRegexp from 'eslint-plugin-regexp'
 import pluginSecurity from 'eslint-plugin-security'
 import pluginSimpleImportSort from 'eslint-plugin-simple-import-sort'
 import pluginSonarjs from 'eslint-plugin-sonarjs'
+// eslint-disable-next-line import-x/default, import-x/no-named-as-default, import-x/no-named-as-default-member -- import-x error
 import pluginVitest from 'eslint-plugin-vitest'
 import globals from 'globals'
 // eslint-disable-next-line import-x/no-unresolved -- import-x error
@@ -82,7 +84,7 @@ const coreConfigs = [
   ...applyToAll('core/eslint-recommended', eslint.configs.recommended),
   ...applyToAll('core/security', pluginSecurity.configs.recommended),
   ...applyToAll('core/promise', pluginPromise.configs['flat/recommended']),
-  ...applyToAll('core/import-x', ...compat.config(pluginImportX.configs.recommended)),
+  ...applyToAll('core/import-x', pluginImportX.flatConfigs.recommended),
   ...applyToAll('core/no-use-extend-native', pluginNoUseExtendNative.configs.recommended),
   ...applyToAll('core/eslint-comments', {
     ...pluginEslintComments.configs.recommended,
@@ -95,6 +97,13 @@ const coreConfigs = [
 
   ...applyToAll('core/depend', pluginDepend.configs['flat/recommended']),
   ...applyToAll('core/sonarjs', pluginSonarjs.configs.recommended), // drop this if using SonarQube or SonarCloud in favor of the IDE extension
+  ...applyToAll('core/sonarjs-custom', {
+    rules: {
+      'sonarjs/todo-tag': 'warn',
+      'sonarjs/no-duplicate-string': 'warn',
+      'sonarjs/no-commented-code': 'warn',
+    },
+  }),
   ...applyToAll('core/no-relative-import-paths', {
     plugins: {
       'no-relative-import-paths': pluginNoRelativeImportPaths,
@@ -308,7 +317,6 @@ const config = tsEslint.config(
         'error',
         {ignore: ['eslint-enable']},
       ],
-      'sonarjs/no-duplicate-string': 'warn',
       'promise/always-return': ['warn', {ignoreLastCallback: true}],
       'promise/no-callback-in-promise': [
         'warn',

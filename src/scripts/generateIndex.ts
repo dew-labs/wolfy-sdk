@@ -2,6 +2,7 @@ import fs from 'node:fs'
 
 const FOLDER_PATH = './src'
 const FOLDER_BLACKLIST = ['@types', 'scripts']
+const FILE_BLACKLIST = ['index.ts', 'setupTest.ts']
 
 function generateIndexContent() {
   const fileNames = fs
@@ -10,7 +11,7 @@ function generateIndexContent() {
       item =>
         (item.isDirectory() && !FOLDER_BLACKLIST.includes(item.name)) ||
         (item.isFile() &&
-          item.name !== 'index.ts' &&
+          !FILE_BLACKLIST.includes(item.name) &&
           item.name.endsWith('.ts') &&
           !item.name.endsWith('.test.ts')),
     )
