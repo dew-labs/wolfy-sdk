@@ -2,6 +2,7 @@
 export * from './abis'
 export * from './chains'
 export * from './contracts'
+export * from './dataStore'
 export * from './events'
 export * from './multicall'
 export * from './order'
