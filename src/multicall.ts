@@ -23,20 +23,23 @@ export function createSatoruMulticallRequest<
       [FunctionArgs<ContractAbi, Method>],
 >(
   chainId: StarknetChainId,
-  contractName: ContractName,
   abi: ContractAbi,
+  contractName: ContractName,
   method: Method,
   args?: Args,
-): {
-  abi: ContractAbi
-  contractAddress: string
-  entrypoint: Method
-  calldata: Args
-} {
+) {
   const contract = createSatoruContract(chainId, contractName, abi)
-
-  // @ts-expect-error -- complex typescript
-  return createMulticallRequest(contract.address, abi, method, args)
+  return createMulticallRequest(
+    contract.address,
+    abi,
+    method as ExtractAbiFunctionNames<ContractAbi>,
+    args,
+  ) as {
+    abi: ContractAbi
+    contractAddress: string
+    entrypoint: Method
+    calldata: Args
+  }
 }
 
 interface CallAndAbi {
@@ -62,11 +65,12 @@ export async function satoruMulticall<T extends CallAndAbi, Ts extends T[]>(
     }),
   )
 
-  // @ts-expect-error -- too complex
+  // eslint-disable-next-line sonarjs/function-return-type -- complex typescript
   return results[1].map((result, index) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guranteed
-    const callData = new CallData(calls[index]!.abi)
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guranteed
-    return callData.parse(calls[index]!.entrypoint, result as unknown as string[])
-  })
+    const call = calls[index]
+    if (!call)
+      throw new Error('call is undefined, something went wrong with the multicall aggregation')
+
+    return new CallData(call.abi).parse(call.entrypoint, result as unknown as string[])
+  }) as {[k in keyof Ts]: FunctionRet<Ts[k]['abi'], Ts[k]['entrypoint']>}
 }

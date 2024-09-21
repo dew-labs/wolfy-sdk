@@ -1,3 +1,5 @@
+import pRetry from 'p-retry'
+import pTimeout from 'p-timeout'
 import type {ParsedEvent} from 'starknet'
 
 import {StarknetChainId} from './chains'
@@ -68,6 +70,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     console.debug('WebSocket Provider disconnected')
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO: refactor to reduce cognitive complexity
   ws.onmessage = message => {
     console.debug(`WebSocketProvider received message: ${message.data}`)
 
@@ -91,10 +94,8 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
             } else {
               promise.reject(new Error('Invalid subscription result', {cause: data}))
             }
-          } else {
-            if (typeof data.result === 'boolean') promise.resolve(data.result)
-            else promise.resolve(false)
-          }
+          } else if (typeof data.result === 'boolean') promise.resolve(data.result)
+          else promise.resolve(false)
           promises.delete(id)
         }
         return
@@ -124,12 +125,14 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     message: {method: string; params: unknown},
     eventName: T,
     eventHandler: SatoruEventHandler<T>,
+    timeout: number,
   ): Promise<() => Promise<boolean>>
   async function send(message: {method: string; params: unknown}): Promise<void>
   async function send(
     message: {method: string; params: unknown},
-    eventName?: SatoruEvent | undefined,
-    eventHandler?: SatoruEventHandler | undefined,
+    eventName?: SatoruEvent,
+    eventHandler?: SatoruEventHandler,
+    timeout = 10000, // ms
   ) {
     if ([WebSocket.CLOSED, WebSocket.CLOSING].includes(ws.readyState)) {
       return Promise.reject(new Error('WebSocket Provider is not closed'))
@@ -145,40 +148,40 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
 
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(toSend)
-    }
-
-    if (ws.readyState === WebSocket.CONNECTING) {
+    } else if (ws.readyState === WebSocket.CONNECTING) {
       pendingMessages.push(toSend)
     }
 
-    return new Promise((resolve, reject) => {
-      let promise
+    const promise = new Promise((resolve, reject) => {
       if (eventName && eventHandler) {
-        promise = {isSubscribe: true, eventName, eventHandler, resolve, reject} as const
-      } else {
-        promise = {isSubscribe: false, resolve, reject} as const
+        promises.set(id, {isSubscribe: true, eventName, eventHandler, resolve, reject})
+        return
       }
 
-      promises.set(id, promise)
+      promises.set(id, {isSubscribe: false, resolve, reject})
     })
+
+    const timeoutPromise = pTimeout(promise, {
+      milliseconds: timeout,
+      message: `Send message timed out after ${timeout}ms`,
+    }).catch(error => {
+      promises.delete(id)
+      throw error
+    })
+
+    return timeoutPromise
   }
 
-  async function subscribeToEvent<T extends SatoruEvent>(
+  async function subscribeTo<T extends SatoruEvent>(
     event: T,
     eventHandler: SatoruEventHandler<T>,
     timeout = 10000, // ms
-    retry: number | false = 3, // number of retries before reject, false for no retries, 0 for infinite retries
+    retries: number = 3, // number of retries before reject, 0 for no retries
   ): Promise<() => Promise<boolean>> {
     const eventHash = getSatoruEventHash(event)
 
     async function trySend() {
-      const timeoutPromise = new Promise<() => Promise<boolean>>((_resolve, reject) => {
-        setTimeout(() => {
-          reject(new Error(`Timed out when subscribe to ${event} event.`))
-        }, timeout)
-      })
-
-      const sendPromise = send(
+      return send(
         {
           method: 'pathfinder_subscribe',
           params: {
@@ -189,30 +192,18 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
         },
         event,
         eventHandler,
+        timeout,
       )
-
-      return await Promise.race([sendPromise, timeoutPromise])
     }
 
-    if (!retry) return await trySend()
-
-    let retryCount = 0
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- its intentional
-    while (true) {
-      try {
-        return await trySend()
-      } catch (e: unknown) {
-        retryCount++
-        if (retry !== 0 && retryCount === retry) {
-          throw e
-        }
-      }
-    }
+    return await pRetry(trySend, {retries, minTimeout: 0, maxTimeout: 0, factor: 1})
   }
 
   // TODO: implement timeout and retry
   async function unsubscribe(id: number) {
+    eventHandlers.delete(id)
+    eventNames.delete(id)
+
     return send({
       method: 'pathfinder_unsubscribe',
       params: [id],
@@ -236,7 +227,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
   }
 
   return {
-    subscribeToEvent,
+    subscribeTo,
     close,
     onOpen,
     onClose,
@@ -250,7 +241,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
 // const eventHandler: SatoruEventHandler<SatoruEvent.OrderCreated> = e => {
 //   console.log(e.order)
 // }
-// const unsubscribe = await wssProvider.subscribeToEvent(SatoruEvent.OrderCreated, eventHandler)
+// const unsubscribe = await wssProvider.subscribeTo(SatoruEvent.OrderCreated, eventHandler)
 // const handleOnOpen = () => {
 //   console.log('wss openned')
 // }

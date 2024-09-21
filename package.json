@@ -1,6 +1,6 @@
 {
   "name": "satoru-sdk",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "description": "",
   "type": "module",
   "sideEffects": false,
@@ -53,6 +53,8 @@
   "dependencies": {
     "abi-wan-kanabi": "2.2.2",
     "just-random": "^3.2.0",
+    "p-retry": "^6.2.0",
+    "p-timeout": "^6.1.2",
     "starknet": "^6.12.1",
     "starknet_multicall": "^1.0.0"
   },
