@@ -23,8 +23,8 @@ export function createSatoruMulticallRequest<
       [FunctionArgs<ContractAbi, Method>],
 >(
   chainId: StarknetChainId,
-  abi: ContractAbi,
   contractName: ContractName,
+  abi: ContractAbi,
   method: Method,
   args?: Args,
 ) {
