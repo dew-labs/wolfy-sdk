@@ -11,6 +11,25 @@ export function parseCairoCustomEnum<T extends Record<string, unknown>>(
     }
   }
 
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    'variant' in value &&
+    typeof value.variant === 'object' &&
+    value.variant !== null
+  ) {
+    const variant = value.variant as Record<string | number | symbol, unknown>
+
+    for (const key in variant) {
+      if (!(key in type)) continue
+
+      const enumValue = variant[key]
+      if (enumValue !== undefined && enumValue !== null) {
+        return type[key] as T[keyof T]
+      }
+    }
+  }
+
   throw new Error('Invalid enum')
 }
 
