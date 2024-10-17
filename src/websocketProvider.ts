@@ -135,7 +135,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     timeout = 10000, // ms
   ) {
     if ([WebSocket.CLOSED, WebSocket.CLOSING].includes(ws.readyState)) {
-      return Promise.reject(new Error('WebSocket Provider is not closed'))
+      return Promise.reject(new Error('WebSocket Provider is closed'))
     }
 
     id++
