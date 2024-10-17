@@ -1,5 +1,6 @@
 import {CairoCustomEnum} from 'starknet'
 
+// eslint-disable-next-line sonarjs/cognitive-complexity -- this complexity is acceptable
 export function parseCairoCustomEnum<T extends Record<string, unknown>>(
   type: T,
   value: unknown,
@@ -28,6 +29,10 @@ export function parseCairoCustomEnum<T extends Record<string, unknown>>(
         return type[key] as T[keyof T]
       }
     }
+  }
+
+  if (typeof value === 'string' && value in type) {
+    return value as T[keyof T]
   }
 
   throw new Error('Invalid enum')
