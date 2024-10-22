@@ -30,3 +30,7 @@ export enum DecreasePositionSwapType {
 export function parseOrderType(orderType: unknown) {
   return parseCairoCustomEnum(OrderType, orderType)
 }
+
+export function parseDecreasePositionSwapType(decreasePositionSwapType: unknown) {
+  return parseCairoCustomEnum(DecreasePositionSwapType, decreasePositionSwapType)
+}
