@@ -1,4 +1,4 @@
-import {CairoUint256, CairoUint512, type Uint256, type Uint512} from 'starknet'
+import {CairoUint256, CairoUint512, num, type Uint256, type Uint512} from 'starknet'
 
 interface SignedInteger {
   mag: number | bigint | Uint256 | Uint512
@@ -46,12 +46,12 @@ function isSignedInteger(num: unknown): num is SignedInteger {
 }
 
 export function cairoIntToBigInt(
-  num: string | number | bigint | Uint256 | Uint512 | SignedInteger,
+  n: string | number | bigint | Uint256 | Uint512 | SignedInteger,
 ): bigint {
-  if (typeof num === 'object') {
-    if (isSignedInteger(num)) return cairoIntToBigInt(num.mag) * (num.sign ? -1n : 1n)
-    if (isU256(num)) return new CairoUint256(num).toBigInt()
-    return new CairoUint512(num).toBigInt()
+  if (typeof n === 'object') {
+    if (isSignedInteger(n)) return cairoIntToBigInt(n.mag) * (n.sign ? -1n : 1n)
+    if (isU256(n)) return new CairoUint256(n).toBigInt()
+    return new CairoUint512(n).toBigInt()
   }
-  return BigInt(num)
+  return num.toBigInt(n)
 }
