@@ -40,6 +40,7 @@ function isSignedInteger(num: unknown): num is SignedInteger {
     'mag' in num &&
     (typeof num.mag === 'number' ||
       typeof num.mag === 'bigint' ||
+      typeof num.mag === 'string' ||
       isU256(num.mag) ||
       isU512(num.mag))
   )
