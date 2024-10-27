@@ -86,6 +86,7 @@ export const SATORU_CONTRACT_ADDRESSES: Record<
   [StarknetChainId.SN_MAIN]: {
     [SatoruContract.Multicall]: '0x620d16d511f5732fffc6ac780352619396f42f43ee3124af4123db199f0be2e',
   },
+  [StarknetChainId.SN_KATANA]: {},
 }
 
 export function registerSatoruContractAddress(

@@ -19,10 +19,12 @@ const RPC_PROVIDERS: Record<ProviderType, Record<StarknetChainId, ProviderConfig
   [ProviderType.HTTP]: {
     [StarknetChainId.SN_SEPOLIA]: [],
     [StarknetChainId.SN_MAIN]: [],
+    [StarknetChainId.SN_KATANA]: [],
   },
   [ProviderType.WSS]: {
     [StarknetChainId.SN_SEPOLIA]: [],
     [StarknetChainId.SN_MAIN]: [],
+    [StarknetChainId.SN_KATANA]: [],
   },
 }
 
