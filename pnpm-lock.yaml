@@ -24,8 +24,8 @@ importers:
         specifier: ^6.12.1
         version: 6.12.1
       starknet_multicall:
-        specifier: ^1.0.0
-        version: 1.0.0(abi-wan-kanabi@2.2.2)(typescript@5.6.2)
+        specifier: ^1.0.1
+        version: 1.0.1(abi-wan-kanabi@2.2.2)(typescript@5.6.2)
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.5.0
@@ -3974,8 +3974,8 @@ packages:
   starknet@6.12.1:
     resolution: {integrity: sha512-LLjabmmkRsBOgg0UaJtkSBBEpqeM49vULWqk06xbdm2kefcTqPLeHN4uYcZ5EqMwoqibv8rGf3a2w6IwXexeSg==}
 
-  starknet_multicall@1.0.0:
-    resolution: {integrity: sha512-NyUVexIMwOJZuz4lrqeXTgbtOCG6Lt6tpaxoGjWwoNY4v3cUSvXYjoorZjrt4dULJfngKCDviZg7fbSf23ouWg==}
+  starknet_multicall@1.0.1:
+    resolution: {integrity: sha512-MWLViTCXavekn6Jo3Roo15Z4+GRHRdNTY86L7lNghuw8jmajQ5DPQ+HG1C8c3q5aW3WJRM2NWPU567tB0nBvhw==}
     peerDependencies:
       abi-wan-kanabi: ^2.2.3
       typescript: ^5.5.4
@@ -8923,7 +8923,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  starknet_multicall@1.0.0(abi-wan-kanabi@2.2.2)(typescript@5.6.2):
+  starknet_multicall@1.0.1(abi-wan-kanabi@2.2.2)(typescript@5.6.2):
     dependencies:
       abi-wan-kanabi: 2.2.2
       starknet: 6.12.1

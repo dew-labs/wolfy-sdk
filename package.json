@@ -1,10 +1,17 @@
 {
-  "name": "satoru-sdk",
-  "version": "1.1.11",
+  "name": "wolfy-sdk",
+  "version": "1.1.12",
   "description": "",
   "type": "module",
   "sideEffects": false,
   "moduleSideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dew-labs/wolfy-sdk"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "./dist/index.d.ts",
@@ -160,14 +167,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@9.7.0",
+  "packageManager": "pnpm@9.12.2",
   "dependencies": {
     "abi-wan-kanabi": "2.2.2",
     "just-random": "^3.2.0",
     "p-retry": "^6.2.0",
     "p-timeout": "^6.1.2",
     "starknet": "^6.12.1",
-    "starknet_multicall": "^1.0.0"
+    "starknet_multicall": "^1.0.1"
   },
   "peerDependencies": {
     "abi-wan-kanabi": "2.2.2",

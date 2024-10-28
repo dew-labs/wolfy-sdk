@@ -1,10 +1,12 @@
-# satoru-sdk
+# wolfy-sdk
+
+SDK to interact with the Wolfy protocol.
 
 ## Usage
 
 
 ```sh
-pnpm add satoru-sdk
+pnpm add wolfy-sdk
 pnpm add -D abi-wan-kanabi
 ```
 
@@ -15,5 +17,5 @@ pnpm link --global
 ```
 
 ```sh
-pnpm link --global satoru-sdk
+pnpm link --global wolfy-sdk
 ```
