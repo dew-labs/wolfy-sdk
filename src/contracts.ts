@@ -25,7 +25,7 @@ import {
 import {StarknetChainId} from './chains'
 import {getProvider, ProviderType} from './rpcProviders'
 
-export enum SatoruContract {
+export enum WolfyContract {
   Multicall = 'Multicall',
   DataStore = 'DataStore',
   EventEmitter = 'EventEmitter',
@@ -47,78 +47,74 @@ export enum SatoruContract {
   FeeHandler = 'FeeHandler',
 }
 
-export function isSatoruContract(contractName: string): contractName is SatoruContract {
-  return contractName in SatoruContract
+export function isWolfyContract(contractName: string): contractName is WolfyContract {
+  return contractName in WolfyContract
 }
 
-export interface SatoruContractAbis {
-  [SatoruContract.Multicall]: typeof MulticallABI
-  [SatoruContract.DataStore]: typeof DataStoreABI
-  [SatoruContract.EventEmitter]: typeof EventEmitterABI
-  [SatoruContract.ReferralStorage]: typeof ReferralStorageABI
-  [SatoruContract.OrderVault]: typeof OrderVaultABI
-  [SatoruContract.DepositVault]: typeof DepositVaultABI
-  [SatoruContract.WithdrawalVault]: typeof WithdrawalVaultABI
-  [SatoruContract.Reader]: typeof ReaderABI
-  [SatoruContract.Router]: typeof RouterABI
-  [SatoruContract.ExchangeRouter]: typeof ExchangeRouterABI
-  [SatoruContract.RoleStore]: typeof RoleStoreABI
-  [SatoruContract.MarketFactory]: typeof MarketFactoryABI
-  [SatoruContract.SwapHandler]: typeof SwapHandlerABI
-  [SatoruContract.OrderHandler]: typeof OrderHandlerABI
-  [SatoruContract.DepositHandler]: typeof DepositHandlerABI
-  [SatoruContract.AdlHandler]: typeof AdlHandlerABI
-  [SatoruContract.LiquidationHandler]: typeof LiquidationHandlerABI
-  [SatoruContract.FeeHandler]: typeof FeeHandlerABI
-  [SatoruContract.WithdrawalHandler]: typeof WithdrawalHandlerABI
+export interface WolfyContractAbis {
+  [WolfyContract.Multicall]: typeof MulticallABI
+  [WolfyContract.DataStore]: typeof DataStoreABI
+  [WolfyContract.EventEmitter]: typeof EventEmitterABI
+  [WolfyContract.ReferralStorage]: typeof ReferralStorageABI
+  [WolfyContract.OrderVault]: typeof OrderVaultABI
+  [WolfyContract.DepositVault]: typeof DepositVaultABI
+  [WolfyContract.WithdrawalVault]: typeof WithdrawalVaultABI
+  [WolfyContract.Reader]: typeof ReaderABI
+  [WolfyContract.Router]: typeof RouterABI
+  [WolfyContract.ExchangeRouter]: typeof ExchangeRouterABI
+  [WolfyContract.RoleStore]: typeof RoleStoreABI
+  [WolfyContract.MarketFactory]: typeof MarketFactoryABI
+  [WolfyContract.SwapHandler]: typeof SwapHandlerABI
+  [WolfyContract.OrderHandler]: typeof OrderHandlerABI
+  [WolfyContract.DepositHandler]: typeof DepositHandlerABI
+  [WolfyContract.AdlHandler]: typeof AdlHandlerABI
+  [WolfyContract.LiquidationHandler]: typeof LiquidationHandlerABI
+  [WolfyContract.FeeHandler]: typeof FeeHandlerABI
+  [WolfyContract.WithdrawalHandler]: typeof WithdrawalHandlerABI
 }
 
-export type SatoruContractAbi<T extends SatoruContract> = SatoruContractAbis[T]
+export type WolfyContractAbi<T extends WolfyContract> = WolfyContractAbis[T]
 
-export const SATORU_CONTRACT_ADDRESSES: Record<
+export const WOLFY_CONTRACT_ADDRESSES: Record<
   StarknetChainId,
-  Partial<Record<SatoruContract, string>>
+  Partial<Record<WolfyContract, string>>
 > = {
   [StarknetChainId.SN_SEPOLIA]: {
-    [SatoruContract.Multicall]:
-      '0x062e7261fc39b214e56a5dc9b6f77674d953973d1b8892f14d76f88c97909647',
+    [WolfyContract.Multicall]: '0x062e7261fc39b214e56a5dc9b6f77674d953973d1b8892f14d76f88c97909647',
   },
   [StarknetChainId.SN_MAIN]: {
-    [SatoruContract.Multicall]: '0x620d16d511f5732fffc6ac780352619396f42f43ee3124af4123db199f0be2e',
+    [WolfyContract.Multicall]: '0x620d16d511f5732fffc6ac780352619396f42f43ee3124af4123db199f0be2e',
   },
   [StarknetChainId.SN_KATANA]: {},
 }
 
-export function registerSatoruContractAddress(
+export function registerWolfyContractAddress(
   chainId: StarknetChainId,
-  contract: SatoruContract,
+  contract: WolfyContract,
   address: string,
 ): void {
-  SATORU_CONTRACT_ADDRESSES[chainId][contract] = address
+  WOLFY_CONTRACT_ADDRESSES[chainId][contract] = address
 }
 
-export function getSatoruContractAddress(
-  chainId: StarknetChainId,
-  contract: SatoruContract,
-): string {
-  if (!SATORU_CONTRACT_ADDRESSES[chainId][contract]) {
+export function getWolfyContractAddress(chainId: StarknetChainId, contract: WolfyContract): string {
+  if (!WOLFY_CONTRACT_ADDRESSES[chainId][contract]) {
     throw new Error(`No contract address found for chain ID: ${chainId}`)
   }
 
-  return SATORU_CONTRACT_ADDRESSES[chainId][contract]
+  return WOLFY_CONTRACT_ADDRESSES[chainId][contract]
 }
 
-export function createSatoruContract<T extends SatoruContract>(
+export function createWolfyContract<T extends WolfyContract>(
   chainId: StarknetChainId,
   contractName: T,
-  abi: SatoruContractAbi<T>,
+  abi: WolfyContractAbi<T>,
   connectTo?: AccountInterface,
 ) {
   const provider = getProvider(ProviderType.HTTP, chainId)
 
   const contract = new Contract(
     abi,
-    getSatoruContractAddress(chainId, contractName),
+    getWolfyContractAddress(chainId, contractName),
     provider,
   ).typedv2(abi)
 

@@ -2,9 +2,9 @@ import {type Account, shortString} from 'starknet'
 
 import {RoleStoreABI} from './abis'
 import {StarknetChainId} from './chains'
-import {createSatoruContract, SatoruContract} from './contracts'
+import {createWolfyContract, WolfyContract} from './contracts'
 
-export enum SatoruRole {
+export enum WolfyRole {
   ROLE_ADMIN = 'ADMIN',
 
   TIMELOCK_ADMIN = 'TIMELOCK_ADMIN',
@@ -30,8 +30,8 @@ export enum SatoruRole {
   ADL_KEEPER = 'ADL_KEEPER',
 }
 
-export async function hasRole(chainId: StarknetChainId, address: string, role: SatoruRole) {
-  const roleStoreContract = createSatoruContract(chainId, SatoruContract.RoleStore, RoleStoreABI)
+export async function hasRole(chainId: StarknetChainId, address: string, role: WolfyRole) {
+  const roleStoreContract = createWolfyContract(chainId, WolfyContract.RoleStore, RoleStoreABI)
   return await roleStoreContract.has_role(address, shortString.encodeShortString(role))
 }
 
@@ -39,7 +39,7 @@ export async function grantRole(
   chainId: StarknetChainId,
   roleAdmin: Account,
   address: string,
-  role: SatoruRole | SatoruRole[],
+  role: WolfyRole | WolfyRole[],
   entityName?: string,
 ) {
   const roles = Array.isArray(role) ? role : [role]
@@ -54,12 +54,12 @@ export async function grantRole(
     return
   }
 
-  const isAdmin = await hasRole(chainId, roleAdmin.address, SatoruRole.ROLE_ADMIN)
+  const isAdmin = await hasRole(chainId, roleAdmin.address, WolfyRole.ROLE_ADMIN)
   if (!isAdmin) {
     throw new Error('Only admin can grant roles')
   }
 
-  const roleStoreContract = createSatoruContract(chainId, SatoruContract.RoleStore, RoleStoreABI)
+  const roleStoreContract = createWolfyContract(chainId, WolfyContract.RoleStore, RoleStoreABI)
 
   // Note: write this way work too, but some how result have the unknown type
   // roleStoreContract.connect(roleAdmin)

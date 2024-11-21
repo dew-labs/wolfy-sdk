@@ -9,11 +9,11 @@ import {createMulticallRequest} from 'starknet_multicall'
 
 import MulticallABI from './abis/MulticallABI'
 import type {StarknetChainId} from './chains'
-import {createSatoruContract, SatoruContract, type SatoruContractAbi} from './contracts'
+import {createWolfyContract, WolfyContract, type WolfyContractAbi} from './contracts'
 
-export function createSatoruMulticallRequest<
-  ContractName extends SatoruContract,
-  ContractAbi extends SatoruContractAbi<ContractName>,
+export function createWolfyMulticallRequest<
+  ContractName extends WolfyContract,
+  ContractAbi extends WolfyContractAbi<ContractName>,
   Method extends ExtractAbiFunctionNames<ContractAbi>,
   // @ts-expect-error -- complex typescript
   Args extends FunctionArgs<ContractAbi, Method> extends unknown[] // note: we have to do this because some how FunctionArgs is wrong for single element
@@ -28,7 +28,7 @@ export function createSatoruMulticallRequest<
   method: Method,
   args?: Args,
 ) {
-  const contract = createSatoruContract(chainId, contractName, abi)
+  const contract = createWolfyContract(chainId, contractName, abi)
   return createMulticallRequest(
     contract.address,
     abi,
@@ -49,11 +49,11 @@ interface CallAndAbi {
   calldata: unknown
 }
 
-export async function satoruMulticall<T extends CallAndAbi, Ts extends T[]>(
+export async function wolfyMulticall<T extends CallAndAbi, Ts extends T[]>(
   chainId: StarknetChainId,
   calls: Ts,
 ): Promise<{[k in keyof Ts]: FunctionRet<Ts[k]['abi'], Ts[k]['entrypoint']>}> {
-  const multicallContract = createSatoruContract(chainId, SatoruContract.Multicall, MulticallABI)
+  const multicallContract = createWolfyContract(chainId, WolfyContract.Multicall, MulticallABI)
 
   const results = await multicallContract.aggregate(
     calls.map(call => {

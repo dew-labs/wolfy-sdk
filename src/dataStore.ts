@@ -53,7 +53,7 @@ export const REQUEST_EXPIRATION_BLOCK_AGE = poseidonHash('REQ_EXPIR_BLOCK_AGE')
 export const PRICE_FEED = poseidonHash('PRICE_FEED')
 export const PRICE_FEED_MULTIPLIER = poseidonHash('PRICE_FEED_MULTIPLIER')
 export const PRICE_FEED_HEARTBEAT_DURATION = poseidonHash('PRICE_FEED_HB_DURATION')
-// Not implemented in satoru contract, but implemented in gmx
+// Not implemented in wolfy contract, but implemented in gmx
 // export const REALTIME_FEED_ID = poseidonHash("REALTIME_FEED_ID");
 // export const REALTIME_FEED_MULTIPLIER = poseidonHash("REALTIME_FEED_MULTIPLIER");
 export const STABLE_PRICE = poseidonHash('STABLE_PRICE')
@@ -416,7 +416,7 @@ export function virtualInventoryForPositionsKey(virtualTokenId: Hashable) {
 
 // ---------------------------------------------------------------------------------------------------------------------\
 
-// Exclusive to satoru
+// Exclusive to wolfy
 
 export const TOTAL_BORROWING = poseidonHash('TOTAL_BORROWING')
 export const STABLE_FUNDING_FACTOR = poseidonHash('STABLE_FUNDING_FACTOR')

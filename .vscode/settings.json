@@ -64,5 +64,5 @@
     "env*": true,
     "**/routeTree.gen.ts": true
   },
-  "cSpell.words": ["Numberish", "Satoru"]
+  "cSpell.words": ["Numberish", "Wolfy", "Freyr"]
 }

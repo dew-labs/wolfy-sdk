@@ -3,18 +3,18 @@ import pTimeout from 'p-timeout'
 import type {ParsedEvent} from 'starknet'
 
 import {StarknetChainId} from './chains'
-import {getSatoruContractAddress, SatoruContract} from './contracts'
-import {getSatoruEventHash, type ParsedSatoruEvent, parseSatoruEvent, SatoruEvent} from './events'
+import {getWolfyContractAddress, WolfyContract} from './contracts'
+import {getWolfyEventHash, type ParsedWolfyEvent, parseWolfyEvent, WolfyEvent} from './events'
 
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type -- in order to achieve optional generic
-export type SatoruEventHandler<T extends SatoruEvent | void = void> = (
-  event: T extends SatoruEvent ? ParsedSatoruEvent<T> : ParsedEvent,
+export type WolfyEventHandler<T extends WolfyEvent | void = void> = (
+  event: T extends WolfyEvent ? ParsedWolfyEvent<T> : ParsedEvent,
 ) => void
 
-export type SatoruWebSocketProvider = ReturnType<typeof createWebsocketProvider>
+export type WolfyWebSocketProvider = ReturnType<typeof createWebsocketProvider>
 
 export default function createWebsocketProvider(url: string, chainId: StarknetChainId) {
-  const eventEmitterAddress = getSatoruContractAddress(chainId, SatoruContract.EventEmitter)
+  const eventEmitterAddress = getWolfyContractAddress(chainId, WolfyContract.EventEmitter)
 
   const ws = new WebSocket(url)
   let id = 0
@@ -23,8 +23,8 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     number,
     | {
         isSubscribe: true
-        eventHandler: SatoruEventHandler
-        eventName: SatoruEvent
+        eventHandler: WolfyEventHandler
+        eventName: WolfyEvent
         resolve: (unsubscriber: () => Promise<void>) => void
         reject: (error: Error) => void
       }
@@ -34,8 +34,8 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
         reject: (error: Error) => void
       }
   >()
-  const eventHandlers = new Map<number, SatoruEventHandler>()
-  const eventNames = new Map<number, SatoruEvent>()
+  const eventHandlers = new Map<number, WolfyEventHandler>()
+  const eventNames = new Map<number, WolfyEvent>()
   let onOpenEventHandler: (() => void) | undefined = undefined
   let onCloseEventHandler: (() => void) | undefined = undefined
   let onErrorEventHandler: ((error: unknown) => void) | undefined = undefined
@@ -114,24 +114,24 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
         const handler = eventHandlers.get(data.result.subscription)
         const eventName = eventNames.get(data.result.subscription)
         if (!handler) return
-        const parsedEvent = parseSatoruEvent(eventName, data.result.result)
+        const parsedEvent = parseWolfyEvent(eventName, data.result.result)
         if (!parsedEvent) return
         handler(parsedEvent as never)
       }
     }
   }
 
-  async function send<T extends SatoruEvent>(
+  async function send<T extends WolfyEvent>(
     message: {method: string; params: unknown},
     eventName: T,
-    eventHandler: SatoruEventHandler<T>,
+    eventHandler: WolfyEventHandler<T>,
     timeout: number,
   ): Promise<() => Promise<boolean>>
   async function send(message: {method: string; params: unknown}): Promise<void>
   async function send(
     message: {method: string; params: unknown},
-    eventName?: SatoruEvent,
-    eventHandler?: SatoruEventHandler,
+    eventName?: WolfyEvent,
+    eventHandler?: WolfyEventHandler,
     timeout = 10000, // ms
   ) {
     if ([WebSocket.CLOSED, WebSocket.CLOSING].includes(ws.readyState)) {
@@ -172,13 +172,13 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     return timeoutPromise
   }
 
-  async function subscribeTo<T extends SatoruEvent>(
+  async function subscribeTo<T extends WolfyEvent>(
     event: T,
-    eventHandler: SatoruEventHandler<T>,
+    eventHandler: WolfyEventHandler<T>,
     timeout = 10000, // ms
     retries: number = 3, // number of retries before reject, 0 for no retries
   ): Promise<() => Promise<boolean>> {
-    const eventHash = getSatoruEventHash(event)
+    const eventHash = getWolfyEventHash(event)
 
     async function trySend() {
       return send(
@@ -238,10 +238,10 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
 // Usages:
 // const wssProvider = getProvider(ProviderType.WSS, StarknetChainId.SN_SEPOLIA)
 
-// const eventHandler: SatoruEventHandler<SatoruEvent.OrderCreated> = e => {
+// const eventHandler: WolfyEventHandler<WolfyEvent.OrderCreated> = e => {
 //   console.log(e.order)
 // }
-// const unsubscribe = await wssProvider.subscribeTo(SatoruEvent.OrderCreated, eventHandler)
+// const unsubscribe = await wssProvider.subscribeTo(WolfyEvent.OrderCreated, eventHandler)
 // const handleOnOpen = () => {
 //   console.log('wss openned')
 // }
