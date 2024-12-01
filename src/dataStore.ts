@@ -17,7 +17,6 @@ export const ACCOUNT_ORDER_LIST = poseidonHash('ACCOUNT_ORDER_LIST')
 export const CREATE_DEPOSIT_FEATURE_DISABLED = poseidonHash('CREATE_DEPOSIT_FEATURE_DISABLED')
 export const CANCEL_DEPOSIT_FEATURE_DISABLED = poseidonHash('CANCEL_DEPOSIT_FEATURE_DISABLED')
 export const EXECUTE_DEPOSIT_FEATURE_DISABLED = poseidonHash('EXEC_DEPOSIT_FEATURE_DISABLED')
-
 export const CREATE_ORDER_FEATURE_DISABLED = poseidonHash('CREATE_ORDER_FEATURE_DISABLED')
 export const EXECUTE_ORDER_FEATURE_DISABLED = poseidonHash('EXECUTE_ORDER_FEATURE_DISABLED')
 export const EXECUTE_ADL_FEATURE_DISABLED = poseidonHash('EXECUTE_ADL_FEATURE_DISABLED')
@@ -38,7 +37,6 @@ export const MIN_ORACLE_BLOCK_CONFIRMATIONS = poseidonHash('MIN_ORACLE_BLOCK_CON
 export const MAX_ORACLE_PRICE_AGE = poseidonHash('MAX_ORACLE_PRICE_AGE')
 export const MAX_ORACLE_REF_PRICE_DEVIATION_FACTOR = poseidonHash('MAX_ORAC_REF_PRICE_DEV_FACTOR')
 export const MIN_ORACLE_SIGNERS = poseidonHash('MIN_ORACLE_SIGNERS')
-
 export const MIN_COLLATERAL_FACTOR = poseidonHash('MIN_COLLATERAL_FACTOR')
 export const MIN_COLLATERAL_FACTOR_FOR_OPEN_INTEREST_MULTIPLIER = poseidonHash(
   'MIN_COLL_FACT_FOR_OI_MULT',
@@ -110,6 +108,8 @@ export const VIRTUAL_TOKEN_ID = poseidonHash('VIRTUAL_TOKEN_ID')
 export const VIRTUAL_MARKET_ID = poseidonHash('VIRTUAL_MARKET_ID')
 export const VIRTUAL_INVENTORY_FOR_SWAPS = poseidonHash('VIRT_INV_FOR_SWAPS')
 export const VIRTUAL_INVENTORY_FOR_POSITIONS = poseidonHash('VIRT_INV_FOR_POSITIONS')
+export const TOTAL_BORROWING = poseidonHash('TOTAL_BORROWING')
+export const STABLE_FUNDING_FACTOR = poseidonHash('STABLE_FUNDING_FACTOR')
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -413,13 +413,6 @@ export function virtualInventoryForSwapsKey(virtualMarketId: Hashable, token: Ha
 export function virtualInventoryForPositionsKey(virtualTokenId: Hashable) {
   return poseidonHash([VIRTUAL_INVENTORY_FOR_POSITIONS, virtualTokenId])
 }
-
-// ---------------------------------------------------------------------------------------------------------------------\
-
-// Exclusive to wolfy
-
-export const TOTAL_BORROWING = poseidonHash('TOTAL_BORROWING')
-export const STABLE_FUNDING_FACTOR = poseidonHash('STABLE_FUNDING_FACTOR')
 
 export function totalBorrowingKey(market: Hashable, isLong: boolean) {
   return poseidonHash([TOTAL_BORROWING, market, isLong])

@@ -47,8 +47,10 @@ function isSignedInteger(n: unknown): n is SignedInteger {
 }
 
 export function cairoIntToBigInt(
-  n: string | number | bigint | Uint256 | Uint512 | SignedInteger,
+  n: undefined | null | string | number | bigint | Uint256 | Uint512 | SignedInteger,
 ): bigint {
+  if (n === undefined || n === null) return 0n
+
   if (typeof n === 'object') {
     if (isSignedInteger(n)) return cairoIntToBigInt(n.mag) * (n.sign ? -1n : 1n)
     if (isU256(n)) return new CairoUint256(n).toBigInt()
