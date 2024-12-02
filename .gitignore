@@ -31,5 +31,6 @@ coverage
 
 public/~partytown
 vitest.config.ts.timestamp*
+tsconfig.vitest-temp.json
 
 .tsup

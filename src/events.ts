@@ -219,6 +219,9 @@ export interface EVENT {
   from_address: string
   keys: string[]
   data: string[]
+  block_hash: string
+  block_number: number
+  transaction_hash: string
 }
 
 export type ParsedWolfyEvent<T extends WolfyEvent> = EventToPrimitiveType<

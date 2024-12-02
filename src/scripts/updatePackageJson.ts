@@ -19,7 +19,7 @@ function generateExportsContent() {
     )
     .map(file => {
       if (file.name.endsWith('.ts')) return file.name.replace('.ts', '')
-      return file.name + '/index'
+      return `${file.name}/index`
     })
 
   const exports: Record<string, unknown> = {

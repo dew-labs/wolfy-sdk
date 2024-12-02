@@ -1,4 +1,4 @@
-import {type AccountInterface, type Call, Contract} from 'starknet'
+import {type AccountInterface, type Call, Contract, type TypedContractV2} from 'starknet'
 
 import {
   type AdlHandlerABI,
@@ -109,7 +109,7 @@ export function createWolfyContract<T extends WolfyContract>(
   contractName: T,
   abi: WolfyContractAbi<T>,
   connectTo?: AccountInterface,
-) {
+): TypedContractV2<WolfyContractAbi<T>> {
   const provider = getProvider(ProviderType.HTTP, chainId)
 
   const contract = new Contract(
@@ -127,7 +127,7 @@ export function createTokenContract(
   chainId: StarknetChainId,
   address: string,
   connectTo?: AccountInterface,
-) {
+): TypedContractV2<typeof ERC20ABI> {
   const provider = getProvider(ProviderType.HTTP, chainId)
 
   const contract = new Contract(ERC20ABI, address, provider).typedv2(ERC20ABI)

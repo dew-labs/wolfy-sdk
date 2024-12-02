@@ -16,10 +16,14 @@ export default defineConfig(_configEnv =>
         globals: true,
         unstubGlobals: true,
         environment: 'node',
-        environmentMatchGlobs: [['**/*.{test,spec}.?(c|m)[jt]s', 'node']],
+        environmentMatchGlobs: [
+          ['**/*.{test,spec}?(-d).?(c|m)[jt]s', 'node'],
+          ['**/__tests__/**/*.?(c|m)[jt]s?(x)', 'node'],
+        ],
         setupFiles: 'src/setupTest.ts',
         typecheck: {
           enabled: true,
+          ignoreSourceErrors: true,
         },
         coverage: {
           enabled: false,

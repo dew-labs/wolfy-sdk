@@ -6,6 +6,7 @@ import type {
 } from 'node_modules/abi-wan-kanabi/dist/kanabi'
 import {CallData, hash} from 'starknet'
 import {createMulticallRequest} from 'starknet_multicall'
+import invariant from 'tiny-invariant'
 
 import MulticallABI from './abis/MulticallABI'
 import type {StarknetChainId} from './chains'
@@ -34,19 +35,14 @@ export function createWolfyMulticallRequest<
     abi,
     method as ExtractAbiFunctionNames<ContractAbi>,
     args,
-  ) as {
-    abi: ContractAbi
-    contractAddress: string
-    entrypoint: Method
-    calldata: Args
-  }
+  )
 }
 
 interface CallAndAbi {
   abi: Abi
   contractAddress: string
   entrypoint: string
-  calldata: unknown
+  calldata: bigint[] | [bigint]
 }
 
 export async function wolfyMulticall<T extends CallAndAbi, Ts extends T[]>(
@@ -60,17 +56,20 @@ export async function wolfyMulticall<T extends CallAndAbi, Ts extends T[]>(
       return {
         to: call.contractAddress,
         selector: hash.getSelectorFromName(call.entrypoint),
-        calldata: call.calldata as bigint[],
+        calldata: call.calldata,
       }
     }),
   )
 
-  // eslint-disable-next-line sonarjs/function-return-type -- complex typescript
-  return results[1].map((result, index) => {
+  const result = results[1]
+
+  invariant(Array.isArray(result), 'multicall returned an invalid result')
+
+  return result.map((result, index) => {
     const call = calls[index]
     if (!call)
       throw new Error('call is undefined, something went wrong with the multicall aggregation')
 
-    return new CallData(call.abi).parse(call.entrypoint, result as unknown as string[])
+    return new CallData(call.abi).parse(call.entrypoint, result as string[])
   }) as {[k in keyof Ts]: FunctionRet<Ts[k]['abi'], Ts[k]['entrypoint']>}
 }

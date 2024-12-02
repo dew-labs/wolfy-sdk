@@ -36,9 +36,9 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
   >()
   const eventHandlers = new Map<number, WolfyEventHandler>()
   const eventNames = new Map<number, WolfyEvent>()
-  let onOpenEventHandler: (() => void) | undefined = undefined
-  let onCloseEventHandler: (() => void) | undefined = undefined
-  let onErrorEventHandler: ((error: unknown) => void) | undefined = undefined
+  let onOpenEventHandler: (() => void) | undefined
+  let onCloseEventHandler: (() => void) | undefined
+  let onErrorEventHandler: ((error: unknown) => void) | undefined
 
   ws.onopen = () => {
     if (onOpenEventHandler) {
@@ -70,7 +70,6 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
     console.debug('WebSocket Provider disconnected')
   }
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO: refactor to reduce cognitive complexity
   ws.onmessage = message => {
     console.debug(`WebSocketProvider received message: ${message.data}`)
 

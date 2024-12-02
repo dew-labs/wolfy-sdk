@@ -1,6 +1,5 @@
 import {CairoCustomEnum} from 'starknet'
 
-// eslint-disable-next-line sonarjs/cognitive-complexity -- this complexity is acceptable
 export function parseCairoCustomEnum<T extends Record<string, unknown>>(
   type: T,
   value: unknown,

@@ -1,5 +1,6 @@
 import random from 'just-random'
 import {RpcProvider} from 'starknet'
+import invariant from 'tiny-invariant'
 
 import {StarknetChainId} from './chains'
 import type {WolfyWebSocketProvider} from './websocketProvider'
@@ -58,10 +59,15 @@ export function registerProvider(
   })
 }
 
-export function getProvider<T extends ProviderType>(
-  type: T,
+export function getProvider(type: ProviderType.HTTP, chainId: StarknetChainId): RpcProvider
+export function getProvider(
+  type: ProviderType.WSS,
   chainId: StarknetChainId,
-): T extends ProviderType.HTTP ? RpcProvider : WolfyWebSocketProvider {
+): WolfyWebSocketProvider
+export function getProvider(
+  type: ProviderType,
+  chainId: StarknetChainId,
+): RpcProvider | WolfyWebSocketProvider {
   const providersConfigs = RPC_PROVIDERS[type][chainId]
 
   if (providersConfigs.length === 0) {
@@ -74,17 +80,15 @@ export function getProvider<T extends ProviderType>(
     providers.push(...(new Array(providerConfig.weight).fill(providerConfig.url) as string[]))
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- guaranteed non-null
-  const providerUrl = random(providers)!
+  const providerUrl = random(providers)
+  invariant(providerUrl)
 
   if (type === ProviderType.HTTP) {
     return new RpcProvider({
       nodeUrl: providerUrl,
       batch: 0,
-    }) as T extends ProviderType.HTTP ? RpcProvider : WolfyWebSocketProvider
+    })
   }
 
-  return createWebsocketProvider(providerUrl, chainId) as T extends ProviderType.HTTP
-    ? RpcProvider
-    : WolfyWebSocketProvider
+  return createWebsocketProvider(providerUrl, chainId)
 }
