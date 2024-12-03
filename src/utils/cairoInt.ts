@@ -1,11 +1,20 @@
-import {CairoUint256, CairoUint512, num, type Uint256, type Uint512} from 'starknet'
+import {
+  type BigNumberish,
+  CairoUint256,
+  CairoUint512,
+  num,
+  type Uint256,
+  type Uint512,
+} from 'starknet'
 
-interface SignedInteger {
+export interface SignedInteger {
   mag: number | bigint | `0x${string}` | Uint256 | Uint512
   sign: boolean
 }
 
-function isU256(n: unknown): n is Uint256 {
+export type CairoInt = Uint256 | Uint512 | SignedInteger
+
+export function isU256(n: unknown): n is Uint256 {
   return (
     n !== null &&
     typeof n === 'object' &&
@@ -16,7 +25,7 @@ function isU256(n: unknown): n is Uint256 {
   )
 }
 
-function isU512(n: unknown): n is Uint512 {
+export function isU512(n: unknown): n is Uint512 {
   return (
     n !== null &&
     typeof n === 'object' &&
@@ -31,7 +40,7 @@ function isU512(n: unknown): n is Uint512 {
   )
 }
 
-function isSignedInteger(n: unknown): n is SignedInteger {
+export function isSignedInteger(n: unknown): n is SignedInteger {
   return (
     n !== null &&
     typeof n === 'object' &&
@@ -46,9 +55,11 @@ function isSignedInteger(n: unknown): n is SignedInteger {
   )
 }
 
-export function cairoIntToBigInt(
-  n: undefined | null | string | number | bigint | Uint256 | Uint512 | SignedInteger,
-): bigint {
+export function isCairoInt(n: unknown): n is CairoInt {
+  return isSignedInteger(n) || isU256(n) || isU512(n)
+}
+
+export function cairoIntToBigInt(n: undefined | null | BigNumberish | CairoInt): bigint {
   if (n === undefined || n === null) return 0n
 
   if (typeof n === 'object') {

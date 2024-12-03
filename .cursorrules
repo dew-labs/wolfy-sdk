@@ -34,3 +34,4 @@ Other Rules need to follow:
 - Maintain consistent order of utility classes
 - Use Tailwind's responsive variants for adaptive designs
 - Leverage NextUI components for rapid development
+- When writing tests, make sure to check for every possible case, edge cases, and error handling. Make sure all possible arguments/parameters are tested.

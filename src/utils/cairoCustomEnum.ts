@@ -37,6 +37,10 @@ export function parseCairoCustomEnum<T extends Record<string, unknown>>(
   throw new Error('Invalid enum')
 }
 
+export type CairoCustomEnumReplicate<R extends string, T = Record<R, void>> = {
+  [K in keyof T]: Record<K, T[K]>
+}[keyof T]
+
 export function toCairoCustomEnum<T extends string>(value: T) {
-  return new CairoCustomEnum({[value]: {}}) as unknown as Record<T, void>
+  return new CairoCustomEnum({[value]: {}}) as Record<T, void>
 }

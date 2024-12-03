@@ -112,7 +112,7 @@ export default function createWebsocketProvider(url: string, chainId: StarknetCh
       ) {
         const handler = eventHandlers.get(data.result.subscription)
         const eventName = eventNames.get(data.result.subscription)
-        if (!handler) return
+        if (!handler || !eventName) return
         const parsedEvent = parseWolfyEvent(eventName, data.result.result)
         if (!parsedEvent) return
         handler(parsedEvent as never)

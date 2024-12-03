@@ -11,7 +11,7 @@ export enum ProviderType {
   WSS = 'WSS',
 }
 
-interface ProviderConfig {
+export interface ProviderConfig {
   url: string
   weight: number
 }
@@ -57,6 +57,22 @@ export function registerProvider(
     url,
     weight,
   })
+}
+
+export function unregisterProvider(
+  type: ProviderType,
+  chainId: StarknetChainId,
+  url: string,
+): void {
+  const providersConfigs = RPC_PROVIDERS[type][chainId]
+  const index = providersConfigs.findIndex(provider => provider.url === url)
+  if (index !== -1) {
+    providersConfigs.splice(index, 1)
+  }
+}
+
+export function clearProviders(type: ProviderType, chainId: StarknetChainId): void {
+  RPC_PROVIDERS[type][chainId] = []
 }
 
 export function getProvider(type: ProviderType.HTTP, chainId: StarknetChainId): RpcProvider

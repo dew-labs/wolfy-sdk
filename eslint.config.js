@@ -392,7 +392,11 @@ function getVitestConfigs() {
       plugins: {
         vitest: pluginVitest,
       },
-      rules: pluginVitest.configs.all.rules,
+      rules: {
+        ...pluginVitest.configs.all.rules,
+        'vitest/prefer-to-be-truthy': 'off',
+        'vitest/prefer-to-be-falsy': 'off',
+      },
       settings: {
         vitest: {
           typecheck: true,

@@ -2,6 +2,7 @@ import type {Abi} from 'abi-wan-kanabi'
 import type {ExtractAbiFunctionNames, FunctionArgs} from 'node_modules/abi-wan-kanabi/dist/kanabi'
 import type {RawArgs, TypedContractV2} from 'starknet'
 
+// TODO: typing events/data for invoked calls
 export function createCall<T extends Abi, Method extends ExtractAbiFunctionNames<T>>(
   contract: TypedContractV2<T>,
   method: Method,

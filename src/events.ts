@@ -1,5 +1,5 @@
 import type {EventToPrimitiveType} from 'node_modules/abi-wan-kanabi/dist/kanabi'
-import {CallData, events, type ParsedEvent} from 'starknet'
+import {CallData, events} from 'starknet'
 
 import EventEmitterABI from './abis/EventEmitterABI'
 
@@ -203,7 +203,7 @@ export const WOLFY_EVENT_HASHES: Record<WolfyEvent, string> = {
   SetCodeOwner: '0x17c0a07835dba8310958775aef84afdeee8cd34da2ae39a2e3a93149c99e85f',
   GovSetCodeOwner: '0x37806b1dd5eed589ed27d060b0ccbd717dca8d36dad207f255cf08ee7c97a1e',
   SetGov: '0x39f56992fc193f6a7bc3bb48cfa8836e05369722fe3ee4d49b6da81a86e6b02',
-}
+} as const
 
 export type WolfyEventHash = (typeof WOLFY_EVENT_HASHES)[keyof typeof WOLFY_EVENT_HASHES]
 
@@ -229,11 +229,10 @@ export type ParsedWolfyEvent<T extends WolfyEvent> = EventToPrimitiveType<
   `freyr::event::event_emitter::EventEmitter::${T}`
 >
 
-export function parseWolfyEvent(eventName: unknown, event: unknown): ParsedEvent | undefined
-export function parseWolfyEvent<T extends WolfyEvent, R = ParsedWolfyEvent<T>>(
+export function parseWolfyEvent<T extends WolfyEvent>(
   eventName: T,
   event: unknown,
-): R | undefined {
+): ParsedWolfyEvent<T> | undefined {
   const parsedValue = events.parseEvents(
     [event] as [EVENT],
     __eventEmitterEvents,
@@ -245,5 +244,7 @@ export function parseWolfyEvent<T extends WolfyEvent, R = ParsedWolfyEvent<T>>(
     throw new Error(`Failed to parse event ${eventName}`)
   }
 
-  return parsedValue[`freyr::event::event_emitter::EventEmitter::${eventName}`] as R
+  return parsedValue[
+    `freyr::event::event_emitter::EventEmitter::${eventName}`
+  ] as ParsedWolfyEvent<T>
 }
