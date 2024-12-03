@@ -13,7 +13,8 @@ function generateIndexContent() {
         (item.isFile() &&
           !FILE_BLACKLIST.includes(item.name) &&
           item.name.endsWith('.ts') &&
-          !item.name.endsWith('.test.ts')),
+          !item.name.endsWith('.test.ts') &&
+          !item.name.endsWith('.test-d.ts')),
     )
     .map(file => file.name.replace('.ts', ''))
 

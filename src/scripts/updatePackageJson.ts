@@ -15,7 +15,8 @@ function generateExportsContent() {
         (item.isFile() &&
           !FILE_BLACKLIST.includes(item.name) &&
           item.name.endsWith('.ts') &&
-          !item.name.endsWith('.test.ts')),
+          !item.name.endsWith('.test.ts') &&
+          !item.name.endsWith('.test-d.ts')),
     )
     .map(file => {
       if (file.name.endsWith('.ts')) return file.name.replace('.ts', '')

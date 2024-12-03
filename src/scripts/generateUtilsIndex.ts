@@ -10,7 +10,8 @@ function generateIndexContent() {
         file.isFile() &&
         file.name !== 'index.ts' &&
         file.name.endsWith('.ts') &&
-        !file.name.endsWith('.test.ts'),
+        !file.name.endsWith('.test.ts') &&
+        !file.name.endsWith('.test-d.ts'),
     )
     .map(file => file.name.replace('.ts', ''))
 
