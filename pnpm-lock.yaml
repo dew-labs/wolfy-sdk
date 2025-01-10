@@ -18,14 +18,14 @@ importers:
         specifier: ^6.2.1
         version: 6.2.1
       p-timeout:
-        specifier: ^6.1.3
-        version: 6.1.3
+        specifier: ^6.1.4
+        version: 6.1.4
       starknet:
-        specifier: ^6.20.3
-        version: 6.20.3
+        specifier: ^6.21.0
+        version: 6.21.0
       starknet_multicall:
-        specifier: ^1.0.4
-        version: 1.0.4(abi-wan-kanabi@2.2.2)
+        specifier: ^1.0.5
+        version: 1.0.5(abi-wan-kanabi@2.2.2)(starknet@6.21.0)
       tiny-invariant:
         specifier: ^1.3.3
         version: 1.3.3
@@ -1540,12 +1540,13 @@ packages:
   '@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1':
     resolution: {integrity: sha512-54/JRvkLIzzDWshCWfuhadfrfZVPiElY8Fcgmg1HroEly/EDSszzhBAsarCux+D/kOslTRquNzuyGSmUSTTHGg==}
 
-  '@noble/curves@1.3.0':
-    resolution: {integrity: sha512-t01iSXPuN+Eqzb4eBX0S5oubSqXbK/xXa1Ne18Hj8f9pStxztHCE2gfboSp/dZRLSqfuLpRK2nDXDK+W9puocA==}
+  '@noble/curves@1.7.0':
+    resolution: {integrity: sha512-UTMhXK9SeDhFJVrHeUJ5uZlI6ajXg10O6Ddocf9S6GjbSBVZsJo88HzKwXznNfGpMTRDyJkqMjNDPYgf0qFWnw==}
+    engines: {node: ^14.21.3 || >=16}
 
-  '@noble/hashes@1.3.3':
-    resolution: {integrity: sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==}
-    engines: {node: '>= 16'}
+  '@noble/hashes@1.6.0':
+    resolution: {integrity: sha512-YUULf0Uk4/mAA89w+k3+yUYh6NrEvxZa5T6SY3wlMvE2chHkxFUUIDI8/XW1QSC357iA5pSnqt7XEhvFOqmDyQ==}
+    engines: {node: ^14.21.3 || >=16}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1769,11 +1770,11 @@ packages:
   '@rushstack/ts-command-line@4.22.5':
     resolution: {integrity: sha512-eFm+5DJboPHAy3epLNQtmG+hDlBzS950g26nZPbciMQeXmZ5shGGNe6ERjV77wnr5IuxfLhYGJ4ZjPy8Z56MBA==}
 
-  '@scure/base@1.1.7':
-    resolution: {integrity: sha512-PPNYBslrLNNUQ/Yad37MHYsNQtK67EhWb6WtSvNLLPo7SdVZgkUjD6Dg+5On7zNwmskf8OX7I7Nx5oN+MIWE0g==}
+  '@scure/base@1.2.1':
+    resolution: {integrity: sha512-DGmGtC8Tt63J5GfHgfl5CuAXh96VF/LD8K9Hr/Gv0J2lAoRGlPOMpqMpMbCTOoOJMZCk2Xt+DskdDyn6dEFdzQ==}
 
-  '@scure/starknet@1.0.0':
-    resolution: {integrity: sha512-o5J57zY0f+2IL/mq8+AYJJ4Xpc1fOtDhr+mFQKbHnYFmm3WQrC+8zj2HEgxak1a+x86mhmBC1Kq305KUpVf0wg==}
+  '@scure/starknet@1.1.0':
+    resolution: {integrity: sha512-83g3M6Ix2qRsPN4wqLDqiRZ2GBNbjVWfboJE/9UjfG+MHr6oDSu/CWgy8hsBSJejr09DkkL+l0Ze4KVrlCIdtQ==}
 
   '@starknet-io/types-js@0.7.10':
     resolution: {integrity: sha512-1VtCqX4AHWJlRRSYGSn+4X1mqolI1Tdq62IwzoU2vUuEE72S1OlEeGhpvd6XsdqXcfHmVzYfj8k1XtKBQqwo9w==}
@@ -3836,8 +3837,8 @@ packages:
     resolution: {integrity: sha512-hEt02O4hUct5wtwg4H4KcWgDdm+l1bOaEy/hWzd8xtXB9BqxTWBBhb+2ImAtH4Cv4rPjV76xN3Zumqk3k3AhhQ==}
     engines: {node: '>=16.17'}
 
-  p-timeout@6.1.3:
-    resolution: {integrity: sha512-UJUyfKbwvr/uZSV6btANfb+0t/mOhKV/KXcCUTp8FcQI+v/0d+wXqH4htrW0E4rR6WiEO/EPvUFiV9D5OI4vlw==}
+  p-timeout@6.1.4:
+    resolution: {integrity: sha512-MyIV3ZA/PmyBN/ud8vV9XzwTrNtR4jFrObymZYnZqMmW0zA8Z17vnT0rBgFE/TlohB+YCHqXMgZzb3Csp49vqg==}
     engines: {node: '>=14.16'}
 
   p-try@2.2.0:
@@ -4256,13 +4257,14 @@ packages:
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
-  starknet@6.20.3:
-    resolution: {integrity: sha512-RjVYLyCMGwABQCOYatDv8g9Cd1AQaF1202G+76WEK4ExZ+pPO5XDoP3e749u/rVYkn125U+DegcJ0yIwbgN2eA==}
+  starknet@6.21.0:
+    resolution: {integrity: sha512-xUSlqyE+J/S5un3TyQY0Kehilh1u7ewPaut87eOxTDS1r90SU0QvQ3JEECp5LbW/sqsaMhfb+tGTBGrKzXg7bg==}
 
-  starknet_multicall@1.0.4:
-    resolution: {integrity: sha512-wlyscmc1Ywzz+ZT9MCvaMTbSD4qu8kWAuTtxMiMmeSIL7QxPU5wppFK5LkvGhf9+j644FMFbDebYxVSaf5oaGA==}
+  starknet_multicall@1.0.5:
+    resolution: {integrity: sha512-RTw78k4iDZg62cYAkd7o4Q73gC3s6RpcE2sNL8x6sk+SA45+hD3EIrBgvmtxehD2zLuWCUFibuDlQ+ODTeapsQ==}
     peerDependencies:
-      abi-wan-kanabi: ^2.2.3
+      abi-wan-kanabi: 2.2.2
+      starknet: ^6.20.3
 
   std-env@3.8.0:
     resolution: {integrity: sha512-Bc3YwwCB+OzldMxOXJIIvC6cPRWr/LxOp48CdQTOkPyk/t4JWWJbrilwBd7RJzKV8QW7tJkcgAmeuLLJugl5/w==}
@@ -6296,11 +6298,11 @@ snapshots:
     dependencies:
       eslint-scope: 5.1.1
 
-  '@noble/curves@1.3.0':
+  '@noble/curves@1.7.0':
     dependencies:
-      '@noble/hashes': 1.3.3
+      '@noble/hashes': 1.6.0
 
-  '@noble/hashes@1.3.3': {}
+  '@noble/hashes@1.6.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -6465,12 +6467,12 @@ snapshots:
       - '@types/node'
     optional: true
 
-  '@scure/base@1.1.7': {}
+  '@scure/base@1.2.1': {}
 
-  '@scure/starknet@1.0.0':
+  '@scure/starknet@1.1.0':
     dependencies:
-      '@noble/curves': 1.3.0
-      '@noble/hashes': 1.3.3
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.0
 
   '@starknet-io/types-js@0.7.10': {}
 
@@ -8968,7 +8970,7 @@ snapshots:
       is-network-error: 1.1.0
       retry: 0.13.1
 
-  p-timeout@6.1.3: {}
+  p-timeout@6.1.4: {}
 
   p-try@2.2.0: {}
 
@@ -9390,12 +9392,12 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  starknet@6.20.3:
+  starknet@6.21.0:
     dependencies:
-      '@noble/curves': 1.3.0
-      '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.7
-      '@scure/starknet': 1.0.0
+      '@noble/curves': 1.7.0
+      '@noble/hashes': 1.6.0
+      '@scure/base': 1.2.1
+      '@scure/starknet': 1.1.0
       abi-wan-kanabi: 2.2.3
       fetch-cookie: 3.0.1
       isomorphic-fetch: 3.0.0
@@ -9406,13 +9408,11 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  starknet_multicall@1.0.4(abi-wan-kanabi@2.2.2):
+  starknet_multicall@1.0.5(abi-wan-kanabi@2.2.2)(starknet@6.21.0):
     dependencies:
       abi-wan-kanabi: 2.2.2
-      starknet: 6.20.3
+      starknet: 6.21.0
       tiny-invariant: 1.3.3
-    transitivePeerDependencies:
-      - encoding
 
   std-env@3.8.0: {}
 
