@@ -29,10 +29,10 @@ function generateExportsContent() {
         types: './dist/index.d.ts',
         default: './dist/index.js',
       },
-      require: {
-        types: './dist/index.d.cts',
-        default: './dist/index.cjs',
-      },
+      // require: {
+      //   types: './dist/index.d.cts',
+      //   default: './dist/index.cjs',
+      // },
     },
   }
 
@@ -42,10 +42,10 @@ function generateExportsContent() {
         types: `./dist/${fileName}.d.ts`,
         default: `./dist/${fileName}.js`,
       },
-      require: {
-        types: `./dist/${fileName}.d.cts`,
-        default: `./dist/${fileName}.cjs`,
-      },
+      // require: {
+      //   types: `./dist/${fileName}.d.cts`,
+      //   default: `./dist/${fileName}.cjs`,
+      // },
     }
   })
 

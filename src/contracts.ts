@@ -1,4 +1,10 @@
-import {type AccountInterface, type Call, Contract, type TypedContractV2} from 'starknet'
+import {
+  type AccountInterface,
+  type Call,
+  Contract,
+  type InvocationsDetails,
+  type TypedContractV2,
+} from 'starknet'
 
 import {
   type AdlHandlerABI,
@@ -137,7 +143,11 @@ export function createTokenContract(
   return contract
 }
 
-export async function executeAndWait(account: AccountInterface, calls: Call | Call[]) {
-  const result = await account.execute(calls)
+export async function executeAndWait(
+  account: AccountInterface,
+  calls: Call | Call[],
+  transactionsDetail?: InvocationsDetails,
+) {
+  const result = await account.execute(calls, transactionsDetail)
   return await account.waitForTransaction(result.transaction_hash)
 }

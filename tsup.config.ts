@@ -16,6 +16,6 @@ export default defineConfig(options => ({
   minify: !options.watch,
   dts: true,
   metafile: true,
-  format: ['esm', 'cjs'],
+  format: ['esm'],
   // shims: true,
 }))
