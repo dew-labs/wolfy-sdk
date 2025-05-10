@@ -4,7 +4,7 @@ import {beforeEach, describe, expect, it, vi} from 'vitest'
 
 import {createCall} from './createCall'
 
-describe('createCall', () => {
+describe(createCall, () => {
   // Mock contract and ABI
   const mockAbi = [
     {

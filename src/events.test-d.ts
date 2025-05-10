@@ -29,6 +29,7 @@ describe('events types', () => {
       keys: ['0x2'],
       data: ['0x3'],
     })
+
     expectTypeOf(result).toEqualTypeOf<ParsedWolfyEvent<WolfyEvent.DepositCreated> | undefined>()
   })
 
@@ -36,6 +37,7 @@ describe('events types', () => {
     expect.assertions(1)
 
     type TestEvent = ParsedWolfyEvent<WolfyEvent.ClaimableCollateralUpdated>
+
     expectTypeOf<TestEvent>().toEqualTypeOf<{
       market: string
       token: string

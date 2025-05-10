@@ -3,7 +3,7 @@ import {describe, expect, it} from 'vitest'
 
 import {isRepresentZero} from './isRepresentZero'
 
-describe('isRepresentZero', () => {
+describe(isRepresentZero, () => {
   it('should handle number type', () => {
     expect.assertions(3)
 

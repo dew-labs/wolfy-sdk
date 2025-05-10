@@ -30,7 +30,7 @@ describe('multicall types', () => {
       ],
     )
 
-    expectTypeOf(request).toMatchTypeOf<{
+    expectTypeOf(request).toExtend<{
       contractAddress: string
       entrypoint: string
       calldata: unknown[]
@@ -95,7 +95,7 @@ describe('multicall types', () => {
     const [result1, result2, result3] = await wolfyMulticall(StarknetChainId.SN_KATANA, calls)
 
     // Test get_market_info result type
-    expectTypeOf(result1).toMatchTypeOf<{
+    expectTypeOf(result1).toExtend<{
       market: {
         market_token: string
         index_token: string
@@ -162,7 +162,7 @@ describe('multicall types', () => {
     }>()
 
     // Test get_adl_state result type
-    expectTypeOf(result2).toMatchTypeOf<{
+    expectTypeOf(result2).toExtend<{
       0: number | bigint
       1: boolean
       2: {
@@ -173,7 +173,7 @@ describe('multicall types', () => {
     }>()
 
     // Test get_account_orders result type
-    expectTypeOf(result3).toMatchTypeOf<
+    expectTypeOf(result3).toExtend<
       {
         key: string | number | bigint
         order_type: CairoCustomEnumReplicate<OrderType>

@@ -13,7 +13,7 @@ describe('starknetHexString', () => {
     })
   })
 
-  describe('toStarknetHexString', () => {
+  describe(toStarknetHexString, () => {
     it('should convert zero to hex string', () => {
       expect.assertions(1)
 

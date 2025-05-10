@@ -16,7 +16,7 @@ describe('rpcProviders', () => {
     vi.clearAllMocks()
   })
 
-  describe('getProvider', () => {
+  describe(getProvider, () => {
     it('should throw error when no provider is registered', () => {
       expect.assertions(1)
 
@@ -73,7 +73,7 @@ describe('rpcProviders', () => {
     })
   })
 
-  describe('registerProvider', () => {
+  describe(registerProvider, () => {
     it('should successfully register a provider with valid parameters', () => {
       expect.assertions(2)
 

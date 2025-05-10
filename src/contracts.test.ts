@@ -33,7 +33,7 @@ describe('wolfy Contracts', () => {
     vi.clearAllMocks()
   })
 
-  describe('isWolfyContract', () => {
+  describe(isWolfyContract, () => {
     it('should return true for valid contract names', () => {
       expect.assertions(3)
 

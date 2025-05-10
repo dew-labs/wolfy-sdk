@@ -5,7 +5,7 @@ import {describe, expect, it} from 'vitest'
 import {cairoIntToBigInt} from './cairoInt'
 
 describe('cairoInt', () => {
-  describe('cairoIntToBigInt', () => {
+  describe(cairoIntToBigInt, () => {
     it('should handle undefined and null', () => {
       expect.assertions(2)
 

@@ -10,7 +10,7 @@ describe('cairoCustomEnum', () => {
     Third = 'Third',
   }
 
-  describe('parseCairoCustomEnum', () => {
+  describe(parseCairoCustomEnum, () => {
     it('should parse CairoCustomEnum instance', () => {
       expect.assertions(1)
 
@@ -64,7 +64,7 @@ describe('cairoCustomEnum', () => {
     })
   })
 
-  describe('toCairoCustomEnum', () => {
+  describe(toCairoCustomEnum, () => {
     it('should create CairoCustomEnum instance', () => {
       expect.assertions(1)
 

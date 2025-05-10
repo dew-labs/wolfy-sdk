@@ -3,7 +3,7 @@ import {describe, expect, it} from 'vitest'
 
 import {poseidonHash} from './poseidonHash'
 
-describe('poseidonHash', () => {
+describe(poseidonHash, () => {
   it('should hash a single boolean value', () => {
     expect.assertions(2)
 

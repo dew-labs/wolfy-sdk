@@ -66,7 +66,8 @@ describe('wolfy Contracts Types', () => {
       WolfyContract.Multicall,
       MulticallABI,
     )
-    expectTypeOf(contract).toMatchTypeOf<Contract>()
+
+    expectTypeOf(contract).toExtend<Contract>()
 
     // Test optional account parameter
     const mockAccount = {} as AccountInterface
@@ -76,7 +77,8 @@ describe('wolfy Contracts Types', () => {
       MulticallABI,
       mockAccount,
     )
-    expectTypeOf(contractWithAccount).toMatchTypeOf<
+
+    expectTypeOf(contractWithAccount).toExtend<
       TypedContractV2<WolfyContractAbi<WolfyContract.Multicall>>
     >()
   })
@@ -87,7 +89,7 @@ describe('wolfy Contracts Types', () => {
     expectTypeOf(createTokenContract).parameter(0).toEqualTypeOf<StarknetChainId>()
     expectTypeOf(createTokenContract).parameter(1).toEqualTypeOf<string>()
     expectTypeOf(createTokenContract).parameter(2).toEqualTypeOf<AccountInterface | undefined>()
-    expectTypeOf(createTokenContract).returns.toMatchTypeOf<Contract>()
+    expectTypeOf(createTokenContract).returns.toExtend<Contract>()
   })
 
   it('executeAndWait types', () => {
@@ -106,6 +108,7 @@ describe('wolfy Contracts Types', () => {
     expect.assertions(1)
 
     type MulticallAbiType = WolfyContractAbi<WolfyContract.Multicall>
+
     expectTypeOf<MulticallAbiType>().toEqualTypeOf(MulticallABI)
   })
 })
