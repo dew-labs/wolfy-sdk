@@ -1,10 +1,13 @@
 import random from 'just-random'
-import {RpcProvider} from 'starknet'
+import {RpcProvider, type RpcProviderOptions} from 'starknet'
 import invariant from 'tiny-invariant'
 
 import {StarknetChainId} from './chains'
 import type {WolfyWebSocketProvider} from './websocketProvider'
 import createWebsocketProvider from './websocketProvider'
+
+export type ProviderSpec = '0.7.1' | '0.8.1'
+const DEFAULT_SPEC_VERSION: ProviderSpec = '0.7.1'
 
 export enum ProviderType {
   HTTP = 'HTTP',
@@ -14,6 +17,7 @@ export enum ProviderType {
 export interface ProviderConfig {
   url: string
   weight: number
+  specVersion: ProviderSpec
 }
 
 const RPC_PROVIDERS: Record<ProviderType, Record<StarknetChainId, ProviderConfig[]>> = {
@@ -34,6 +38,7 @@ export function registerProvider(
   chainId: StarknetChainId,
   url: string,
   weight = 1,
+  specVersion: ProviderSpec = DEFAULT_SPEC_VERSION,
 ): void {
   if (!Number.isSafeInteger(weight) || weight < 1) {
     throw new Error('Weight must be a positive safe integer')
@@ -49,6 +54,7 @@ export function registerProvider(
     providersConfigs[existProviderConfigIndex] = {
       url,
       weight,
+      specVersion,
     }
     return
   }
@@ -56,6 +62,7 @@ export function registerProvider(
   providersConfigs.push({
     url,
     weight,
+    specVersion,
   })
 }
 
@@ -75,14 +82,20 @@ export function clearProviders(type: ProviderType, chainId: StarknetChainId): vo
   RPC_PROVIDERS[type][chainId] = []
 }
 
-export function getProvider(type: ProviderType.HTTP, chainId: StarknetChainId): RpcProvider
+export function getProvider(
+  type: ProviderType.HTTP,
+  chainId: StarknetChainId,
+  options?: RpcProviderOptions,
+): RpcProvider
 export function getProvider(
   type: ProviderType.WSS,
   chainId: StarknetChainId,
+  options?: RpcProviderOptions,
 ): WolfyWebSocketProvider
 export function getProvider(
   type: ProviderType,
   chainId: StarknetChainId,
+  options?: RpcProviderOptions,
 ): RpcProvider | WolfyWebSocketProvider {
   const providersConfigs = RPC_PROVIDERS[type][chainId]
 
@@ -90,21 +103,32 @@ export function getProvider(
     throw new Error(`No provider found for type: ${type} and chain ID: ${chainId}`)
   }
 
-  const providers: string[] = []
+  const desiredSpecVersion = options?.specVersion ?? DEFAULT_SPEC_VERSION
+
+  const providers: {url: string; specVersion: ProviderSpec}[] = []
 
   providersConfigs.forEach(providerConfig => {
-    providers.push(...(new Array(providerConfig.weight).fill(providerConfig.url) as string[]))
+    if (providerConfig.specVersion !== desiredSpecVersion) return
+
+    providers.push(
+      ...(new Array(providerConfig.weight).fill({
+        url: providerConfig.url,
+        specVersion: providerConfig.specVersion,
+      }) as {url: string; specVersion: ProviderSpec}[]),
+    )
   })
 
-  const providerUrl = random(providers)
-  invariant(providerUrl)
+  const provider = random(providers)
+  invariant(provider)
 
   if (type === ProviderType.HTTP) {
     return new RpcProvider({
-      nodeUrl: providerUrl,
+      nodeUrl: provider.url,
+      specVersion: provider.specVersion,
       batch: 0,
+      ...options,
     })
   }
 
-  return createWebsocketProvider(providerUrl, chainId)
+  return createWebsocketProvider(provider.url, chainId)
 }
