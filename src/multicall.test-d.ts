@@ -1,5 +1,5 @@
 import type {Uint256} from 'starknet'
-import {describe, expect, expectTypeOf, it} from 'vitest'
+import {describe, expectTypeOf, it} from 'vitest'
 
 import {ReaderABI} from './abis'
 import {StarknetChainId} from './chains'
@@ -10,8 +10,6 @@ import type {CairoCustomEnumReplicate} from './utils/cairoCustomEnum'
 
 describe('multicall types', () => {
   it('createWolfyMulticallRequest types', () => {
-    expect.assertions(1)
-
     const request = createWolfyMulticallRequest(
       StarknetChainId.SN_KATANA,
       WolfyContract.Reader,
@@ -38,8 +36,6 @@ describe('multicall types', () => {
   })
 
   it('wolfyMulticall return types', async () => {
-    expect.assertions(1)
-
     const calls = [
       createWolfyMulticallRequest(
         StarknetChainId.SN_KATANA,

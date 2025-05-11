@@ -18,16 +18,12 @@ describe('rpcProviders', () => {
 
   describe(getProvider, () => {
     it('should throw error when no provider is registered', () => {
-      expect.assertions(1)
-
       expect(() => getProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN)).toThrow(
         `No provider found for type: HTTP and chain ID: ${StarknetChainId.SN_MAIN}`,
       )
     })
 
     it('should return HTTP provider when type is HTTP', () => {
-      expect.assertions(1)
-
       registerProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN, 'https://example.com', 1)
       const provider = getProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN)
 
@@ -35,8 +31,6 @@ describe('rpcProviders', () => {
     })
 
     it('should return WebSocket provider when type is WSS', () => {
-      expect.assertions(2)
-
       registerProvider(ProviderType.WSS, StarknetChainId.SN_MAIN, 'wss://example.com', 1)
       const provider = getProvider(ProviderType.WSS, StarknetChainId.SN_MAIN)
 
@@ -48,8 +42,6 @@ describe('rpcProviders', () => {
     })
 
     it('should respect provider weights in selection', () => {
-      expect.assertions(2)
-
       const url1 = 'https://example1.com'
       const url2 = 'https://example2.com'
 
@@ -75,8 +67,6 @@ describe('rpcProviders', () => {
 
   describe(registerProvider, () => {
     it('should successfully register a provider with valid parameters', () => {
-      expect.assertions(2)
-
       expect(() => {
         registerProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN, 'https://example.com', 1)
       }).not.toThrow()
@@ -87,16 +77,12 @@ describe('rpcProviders', () => {
     })
 
     it('should throw error when weight is less than 1', () => {
-      expect.assertions(1)
-
       expect(() => {
         registerProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN, 'https://example.com', 0)
       }).toThrow('Weight must be a positive safe integer')
     })
 
     it('should throw error when weight is not a safe integer', () => {
-      expect.assertions(1)
-
       expect(() => {
         registerProvider(
           ProviderType.HTTP,
@@ -108,8 +94,6 @@ describe('rpcProviders', () => {
     })
 
     it('should update existing provider if same URL and weight', () => {
-      expect.assertions(1)
-
       registerProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN, 'https://example.com', 1)
       registerProvider(ProviderType.HTTP, StarknetChainId.SN_MAIN, 'https://example.com', 1)
 

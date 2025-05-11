@@ -4,7 +4,7 @@ import {
   type GetTransactionReceiptResponse,
   type TypedContractV2,
 } from 'starknet'
-import {describe, expect, expectTypeOf, it} from 'vitest'
+import {describe, expectTypeOf, it} from 'vitest'
 
 import {MulticallABI} from './abis'
 import {StarknetChainId} from './chains'
@@ -21,8 +21,6 @@ import {
 
 describe('wolfy Contracts Types', () => {
   it('isWolfyContract type guard', () => {
-    expect.assertions(1)
-
     const contractName = 'Multicall' as string
     if (isWolfyContract(contractName)) {
       expectTypeOf(contractName).toEqualTypeOf<WolfyContract>()
@@ -30,8 +28,6 @@ describe('wolfy Contracts Types', () => {
   })
 
   it('registerWolfyContractAddress types', () => {
-    expect.assertions(4)
-
     expectTypeOf(registerWolfyContractAddress).parameter(0).toEqualTypeOf<StarknetChainId>()
     expectTypeOf(registerWolfyContractAddress).parameter(1).toEqualTypeOf<WolfyContract>()
     expectTypeOf(registerWolfyContractAddress).parameter(2).toEqualTypeOf<string>()
@@ -39,16 +35,12 @@ describe('wolfy Contracts Types', () => {
   })
 
   it('getWolfyContractAddress types', () => {
-    expect.assertions(3)
-
     expectTypeOf(getWolfyContractAddress).parameter(0).toEqualTypeOf<StarknetChainId>()
     expectTypeOf(getWolfyContractAddress).parameter(1).toEqualTypeOf<WolfyContract>()
     expectTypeOf(getWolfyContractAddress).returns.toEqualTypeOf<string>()
   })
 
   it('createWolfyContract types', () => {
-    expect.assertions(3)
-
     expectTypeOf(createWolfyContract<typeof WolfyContract.DataStore>)
       .parameter(0)
       .toEqualTypeOf<StarknetChainId>()
@@ -84,8 +76,6 @@ describe('wolfy Contracts Types', () => {
   })
 
   it('createTokenContract types', () => {
-    expect.assertions(4)
-
     expectTypeOf(createTokenContract).parameter(0).toEqualTypeOf<StarknetChainId>()
     expectTypeOf(createTokenContract).parameter(1).toEqualTypeOf<string>()
     expectTypeOf(createTokenContract).parameter(2).toEqualTypeOf<AccountInterface | undefined>()
@@ -93,8 +83,6 @@ describe('wolfy Contracts Types', () => {
   })
 
   it('executeAndWait types', () => {
-    expect.assertions(4)
-
     expectTypeOf(executeAndWait).parameter(0).toEqualTypeOf<AccountInterface>()
 
     expectTypeOf(executeAndWait)
@@ -105,8 +93,6 @@ describe('wolfy Contracts Types', () => {
   })
 
   it('wolfyContractAbi type mapping', () => {
-    expect.assertions(1)
-
     type MulticallAbiType = WolfyContractAbi<typeof WolfyContract.Multicall>
 
     expectTypeOf<MulticallAbiType>().toEqualTypeOf(MulticallABI)

@@ -1,5 +1,7 @@
+import {klona} from 'klona'
 import type {EventToPrimitiveType} from 'node_modules/abi-wan-kanabi/dist/kanabi'
-import {CallData, events} from 'starknet'
+import {CallData, events as eventsUtils} from 'starknet'
+import invariant from 'tiny-invariant'
 
 import EventEmitterABI from './abis/EventEmitterABI'
 
@@ -212,7 +214,7 @@ export function getWolfyEventHash(event: WolfyEvent): string {
   return WOLFY_EVENT_HASHES[event]
 }
 
-const __eventEmitterEvents = events.getAbiEvents(EventEmitterABI)
+const __eventEmitterEvents = eventsUtils.getAbiEvents(EventEmitterABI)
 const __eventEmitterStructs = CallData.getAbiStruct(EventEmitterABI)
 const __eventEmitterEnums = CallData.getAbiEnum(EventEmitterABI)
 
@@ -230,12 +232,13 @@ export type ParsedWolfyEvent<T extends WolfyEvent> = EventToPrimitiveType<
   `freyr::event::event_emitter::EventEmitter::${T}`
 >
 
+// NOTE: `eventsUtils.parseEvents` mutate the events passed so we need to deep clone it
 export function parseWolfyEvent<T extends WolfyEvent>(
   eventName: T,
   event: unknown,
 ): ParsedWolfyEvent<T> | undefined {
-  const parsedValue = events.parseEvents(
-    [event] as [EVENT],
+  const parsedValue = eventsUtils.parseEvents(
+    (Array.isArray(event) ? klona(event) : [klona(event)]) as [EVENT],
     __eventEmitterEvents,
     __eventEmitterStructs,
     __eventEmitterEnums,
@@ -245,7 +248,50 @@ export function parseWolfyEvent<T extends WolfyEvent>(
     throw new Error(`Failed to parse event ${eventName}`)
   }
 
-  return parsedValue[
-    `freyr::event::event_emitter::EventEmitter::${eventName}`
-  ] as ParsedWolfyEvent<T>
+  const parsedEvent = parsedValue[`freyr::event::event_emitter::EventEmitter::${eventName}`]
+
+  invariant(parsedEvent, 'Cannot parsed event')
+
+  return parsedEvent as ParsedWolfyEvent<T>
+}
+
+export type ParsedWolfyEvents<T extends WolfyEvent> = {
+  [key in Uncapitalize<T>]?: ParsedWolfyEvent<Capitalize<key>> | undefined
+}
+
+function Uncapitalize<T extends string>(str: T): Uncapitalize<T> {
+  return (str.charAt(0).toLowerCase() + str.slice(1)) as Uncapitalize<T>
+}
+
+export function parseWolfyEvents<T extends WolfyEvent>(
+  eventNames: T[],
+  events: unknown[],
+): ParsedWolfyEvents<T> {
+  const parsedEvents = eventsUtils.parseEvents(
+    klona(events) as [EVENT],
+    __eventEmitterEvents,
+    __eventEmitterStructs,
+    __eventEmitterEnums,
+  )
+
+  const eventsMap = new Map<Uncapitalize<T>, ParsedWolfyEvent<T>>()
+
+  const eventNamesSet = new Set(eventNames)
+
+  parsedEvents.forEach(event => {
+    Object.entries(event).forEach(([key, value]) => {
+      if (key.startsWith(`freyr::event::event_emitter::EventEmitter::`)) {
+        const capitalizedEventName = key.replace(
+          `freyr::event::event_emitter::EventEmitter::`,
+          '',
+        ) as T
+        const eventName = Uncapitalize(capitalizedEventName)
+        if (eventNamesSet.has(capitalizedEventName)) {
+          eventsMap.set(eventName, value as ParsedWolfyEvent<T>)
+        }
+      }
+    })
+  })
+
+  return Object.fromEntries(eventsMap) as ParsedWolfyEvents<T>
 }
