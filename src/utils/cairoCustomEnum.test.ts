@@ -4,11 +4,12 @@ import {describe, expect, it} from 'vitest'
 import {parseCairoCustomEnum, toCairoCustomEnum} from './cairoCustomEnum'
 
 describe('cairoCustomEnum', () => {
-  enum TestEnum {
-    First = 'First',
-    Second = 'Second',
-    Third = 'Third',
-  }
+  const TestEnum = {
+    First: 'First',
+    Second: 'Second',
+    Third: 'Third',
+  } as const
+  type TestEnum = (typeof TestEnum)[keyof typeof TestEnum]
 
   describe(parseCairoCustomEnum, () => {
     it('should parse CairoCustomEnum instance', () => {

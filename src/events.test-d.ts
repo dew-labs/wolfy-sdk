@@ -30,13 +30,15 @@ describe('events types', () => {
       data: ['0x3'],
     })
 
-    expectTypeOf(result).toEqualTypeOf<ParsedWolfyEvent<WolfyEvent.DepositCreated> | undefined>()
+    expectTypeOf(result).toEqualTypeOf<
+      ParsedWolfyEvent<typeof WolfyEvent.DepositCreated> | undefined
+    >()
   })
 
   it('parsedWolfyEvent type', () => {
     expect.assertions(1)
 
-    type TestEvent = ParsedWolfyEvent<WolfyEvent.ClaimableCollateralUpdated>
+    type TestEvent = ParsedWolfyEvent<typeof WolfyEvent.ClaimableCollateralUpdated>
 
     expectTypeOf<TestEvent>().toEqualTypeOf<{
       market: string

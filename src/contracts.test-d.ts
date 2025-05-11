@@ -49,15 +49,15 @@ describe('wolfy Contracts Types', () => {
   it('createWolfyContract types', () => {
     expect.assertions(3)
 
-    expectTypeOf(createWolfyContract<WolfyContract.DataStore>)
+    expectTypeOf(createWolfyContract<typeof WolfyContract.DataStore>)
       .parameter(0)
       .toEqualTypeOf<StarknetChainId>()
 
-    expectTypeOf(createWolfyContract<WolfyContract.DataStore>)
+    expectTypeOf(createWolfyContract<typeof WolfyContract.DataStore>)
       .parameter(1)
-      .toEqualTypeOf<WolfyContract.DataStore>()
-    expectTypeOf(createWolfyContract<WolfyContract.DataStore>).returns.toEqualTypeOf<
-      TypedContractV2<WolfyContractAbi<WolfyContract.DataStore>>
+      .toEqualTypeOf<typeof WolfyContract.DataStore>()
+    expectTypeOf(createWolfyContract<typeof WolfyContract.DataStore>).returns.toEqualTypeOf<
+      TypedContractV2<WolfyContractAbi<typeof WolfyContract.DataStore>>
     >()
 
     // Test that the ABI parameter is correctly typed based on the contract name
@@ -79,7 +79,7 @@ describe('wolfy Contracts Types', () => {
     )
 
     expectTypeOf(contractWithAccount).toExtend<
-      TypedContractV2<WolfyContractAbi<WolfyContract.Multicall>>
+      TypedContractV2<WolfyContractAbi<typeof WolfyContract.Multicall>>
     >()
   })
 
@@ -107,7 +107,7 @@ describe('wolfy Contracts Types', () => {
   it('wolfyContractAbi type mapping', () => {
     expect.assertions(1)
 
-    type MulticallAbiType = WolfyContractAbi<WolfyContract.Multicall>
+    type MulticallAbiType = WolfyContractAbi<typeof WolfyContract.Multicall>
 
     expectTypeOf<MulticallAbiType>().toEqualTypeOf(MulticallABI)
   })

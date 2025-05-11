@@ -9,10 +9,11 @@ import createWebsocketProvider from './websocketProvider'
 export type ProviderSpec = '0.7.1' | '0.8.1'
 const DEFAULT_SPEC_VERSION: ProviderSpec = '0.7.1'
 
-export enum ProviderType {
-  HTTP = 'HTTP',
-  WSS = 'WSS',
-}
+export const ProviderType = {
+  HTTP: 'HTTP',
+  WSS: 'WSS',
+} as const
+export type ProviderType = (typeof ProviderType)[keyof typeof ProviderType]
 
 export interface ProviderConfig {
   url: string
@@ -83,12 +84,12 @@ export function clearProviders(type: ProviderType, chainId: StarknetChainId): vo
 }
 
 export function getProvider(
-  type: ProviderType.HTTP,
+  type: typeof ProviderType.HTTP,
   chainId: StarknetChainId,
   options?: RpcProviderOptions,
 ): RpcProvider
 export function getProvider(
-  type: ProviderType.WSS,
+  type: typeof ProviderType.WSS,
   chainId: StarknetChainId,
   options?: RpcProviderOptions,
 ): WolfyWebSocketProvider

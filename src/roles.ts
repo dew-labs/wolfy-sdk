@@ -4,31 +4,21 @@ import {RoleStoreABI} from './abis'
 import {StarknetChainId} from './chains'
 import {createWolfyContract, WolfyContract} from './contracts'
 
-export enum WolfyRole {
-  ROLE_ADMIN = 'ADMIN',
-
-  TIMELOCK_ADMIN = 'TIMELOCK_ADMIN',
-
-  TIMELOCK_MULTISIG = 'TIMELOCK_MULTISIG',
-
-  CONFIG_KEEPER = 'CONFIG_KEEPER',
-
-  CONTROLLER = 'CONTROLLER',
-
-  ROUTER_PLUGIN = 'ROUTER_PLUGIN',
-
-  MARKET_KEEPER = 'MARKET_KEEPER',
-
-  FEE_KEEPER = 'FEE_KEEPER',
-
-  ORDER_KEEPER = 'ORDER_KEEPER',
-
-  FROZEN_ORDER_KEEPER = 'FROZEN_ORDER_KEEPER',
-
-  LIQUIDATION_KEEPER = 'LIQUIDATION_KEEPER',
-
-  ADL_KEEPER = 'ADL_KEEPER',
-}
+export const WolfyRole = {
+  ROLE_ADMIN: 'ADMIN',
+  TIMELOCK_ADMIN: 'TIMELOCK_ADMIN',
+  TIMELOCK_MULTISIG: 'TIMELOCK_MULTISIG',
+  CONFIG_KEEPER: 'CONFIG_KEEPER',
+  CONTROLLER: 'CONTROLLER',
+  ROUTER_PLUGIN: 'ROUTER_PLUGIN',
+  MARKET_KEEPER: 'MARKET_KEEPER',
+  FEE_KEEPER: 'FEE_KEEPER',
+  ORDER_KEEPER: 'ORDER_KEEPER',
+  FROZEN_ORDER_KEEPER: 'FROZEN_ORDER_KEEPER',
+  LIQUIDATION_KEEPER: 'LIQUIDATION_KEEPER',
+  ADL_KEEPER: 'ADL_KEEPER',
+} as const
+export type WolfyRole = (typeof WolfyRole)[keyof typeof WolfyRole]
 
 export async function hasRole(chainId: StarknetChainId, address: string, role: WolfyRole) {
   const roleStoreContract = createWolfyContract(chainId, WolfyContract.RoleStore, RoleStoreABI)

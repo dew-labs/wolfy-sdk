@@ -31,27 +31,28 @@ import {
 import {StarknetChainId} from './chains'
 import {getProvider, ProviderType} from './rpcProviders'
 
-export enum WolfyContract {
-  Multicall = 'Multicall',
-  DataStore = 'DataStore',
-  EventEmitter = 'EventEmitter',
-  ReferralStorage = 'ReferralStorage',
-  OrderVault = 'OrderVault',
-  DepositVault = 'DepositVault',
-  WithdrawalVault = 'WithdrawalVault',
-  Reader = 'Reader',
-  Router = 'Router',
-  ExchangeRouter = 'ExchangeRouter',
-  RoleStore = 'RoleStore',
-  MarketFactory = 'MarketFactory',
-  OrderHandler = 'OrderHandler',
-  DepositHandler = 'DepositHandler',
-  WithdrawalHandler = 'WithdrawalHandler',
-  AdlHandler = 'AdlHandler',
-  LiquidationHandler = 'LiquidationHandler',
-  SwapHandler = 'SwapHandler',
-  FeeHandler = 'FeeHandler',
-}
+export const WolfyContract = {
+  Multicall: 'Multicall',
+  DataStore: 'DataStore',
+  EventEmitter: 'EventEmitter',
+  ReferralStorage: 'ReferralStorage',
+  OrderVault: 'OrderVault',
+  DepositVault: 'DepositVault',
+  WithdrawalVault: 'WithdrawalVault',
+  Reader: 'Reader',
+  Router: 'Router',
+  ExchangeRouter: 'ExchangeRouter',
+  RoleStore: 'RoleStore',
+  MarketFactory: 'MarketFactory',
+  OrderHandler: 'OrderHandler',
+  DepositHandler: 'DepositHandler',
+  WithdrawalHandler: 'WithdrawalHandler',
+  AdlHandler: 'AdlHandler',
+  LiquidationHandler: 'LiquidationHandler',
+  SwapHandler: 'SwapHandler',
+  FeeHandler: 'FeeHandler',
+} as const
+export type WolfyContract = (typeof WolfyContract)[keyof typeof WolfyContract]
 
 export function isWolfyContract(contractName: string): contractName is WolfyContract {
   return contractName in WolfyContract
